@@ -5,11 +5,13 @@ import java.awt.Graphics;
 
 import assets.Assets;
 import engine.Engine;
+import gfx.Colors;
 import inputs.Keyboard;
 import inputs.Mouse;
 import objects.GameObject;
 import objects.entities.containers.ItemContainer;
 import objects.items.Item;
+import objects.items.equipments.Equipment;
 import objects.items.inventory.Inventory;
 import physics.Handler;
 import utils.Text;
@@ -305,15 +307,22 @@ public class InventoryRenderer extends UI
 			}
 			if(i == 0)
 			{
-				Text.drawString(graphics, "> " + inventory.getCells().get(selectedCell + i).getType().getName() + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("font").deriveFont(28f));
+				Text.drawString(graphics, "> " + (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? " [E] " : "") + inventory.getCells().get(selectedCell + i).getType().getName() + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("font").deriveFont(28f));
 			}
 			else
 			{
-				Text.drawString(graphics, inventory.getCells().get(selectedCell + i).getType().getName(), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("font").deriveFont(28f));
+				Text.drawString(graphics, (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? " [E] " : "") + inventory.getCells().get(selectedCell + i).getType().getName(), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("font").deriveFont(28f));
 			}
 		}
 		Item item = inventory.getCells().get(selectedCell).getType();
 		graphics.drawImage(item.getSkin().getCurrentSkin(), invImageX, invImageY, invImageWidth, invImageHeight, null);
+		if(inventory.getCells().get(selectedCell).getType() instanceof Equipment)
+		{
+			// equipment tag
+			Text.drawString(graphics, "[E]", invImageX - 7, invImageY + 14, false, Color.white, Assets.fonts.get("font").deriveFont(18f));
+			// rarity tag
+			Text.drawString(graphics, "*", (invImageX + invImageWidth) - 18, invImageY + invImageHeight, false, Colors.gold1, Assets.fonts.get("font").deriveFont(18f));
+		}
 		Text.drawString(graphics, "" + inventory.getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("font").deriveFont(18f));
 		if(openedContainer != null)
 		{

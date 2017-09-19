@@ -9,6 +9,7 @@ import inputs.Keyboard;
 import inputs.Mouse;
 import objects.GameObject;
 import objects.items.Item;
+import objects.items.equipments.Equipment;
 import objects.items.inventory.Inventory;
 import physics.Handler;
 import tiles.Tile;
@@ -32,6 +33,7 @@ public class Player extends Entity
 		{
 			inventory.addItem(new Item("rock", Assets.textures.get("rock"), 1, 1));
 		}
+		inventory.addItem(new Equipment("knife", Assets.textures.get("knife"), 1, 1));
 	}
 
 	@Override
@@ -67,8 +69,8 @@ public class Player extends Entity
 			}
 			path = Handler.getWorld().getMap().findPath(x / Tile.TILEWIDTH, y / Tile.TILEHEIGHT, mouseTileX, mouseTileY);
 			index = 0;
-			move();
 		}
+		move();
 
 		if(!mouseMove)
 		{
