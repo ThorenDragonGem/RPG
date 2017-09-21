@@ -5,10 +5,12 @@ import java.awt.Graphics;
 
 import assets.Assets;
 import engine.Engine;
+import gfx.Colors;
 import inputs.Keyboard;
 import inputs.Mouse;
 import objects.entities.containers.ItemContainer;
 import objects.items.Item;
+import objects.items.equipments.Equipment;
 import physics.Handler;
 import tiles.Tile;
 import utils.Text;
@@ -19,6 +21,7 @@ public class ItemContainerRenderer extends UI
 	private int invListCenterX, invListCenterY, invListSpacing, invImageX, invImageY, invImageWidth, invImageHeight, invCountX, invCountY;
 	private int transferLeftX, transferLeftY, transferLeftWidth, transferLeftHeight;
 	private int selectedCell = 0;
+	private ItemUI itemUI;
 
 	public ItemContainerRenderer(ItemContainer container)
 	{
@@ -27,18 +30,21 @@ public class ItemContainerRenderer extends UI
 		opened = false;
 		skin = Assets.textures.get("container");
 
+		itemUI = new ItemUI(null);
+		Handler.getUis().add(itemUI);
+
 		width = skin.getCurrentSkin().getWidth();
 		height = skin.getCurrentSkin().getHeight();
 		x = (int)(Engine.getWidth() - (width * 1.25)) + 30;
 		y = (Engine.getHeight() / 2) - (height / 2);
-		invListCenterX = x + (width - 171);
+		invListCenterX = x + (width - 168);
 		invListCenterY = y + (height / 2) + 5;
 		invListSpacing = 30;
 		invImageWidth = 64;
 		invImageHeight = 64;
-		invImageX = (x + width) - 388 - invImageWidth;
+		invImageX = (x + width) - 383 - invImageWidth;
 		invImageY = y + (invImageHeight / 2);
-		invCountX = (x + width) - 421;
+		invCountX = (x + width) - 416;
 		invCountY = y + 124;
 		transferLeftWidth = 23;
 		transferLeftHeight = 61;
@@ -93,17 +99,36 @@ public class ItemContainerRenderer extends UI
 			}
 			if(i == 0)
 			{
-				Text.drawString(graphics, "> " + container.getInventory().getCells().get(selectedCell + i).getType().getName() + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("font").deriveFont(28f));
+				Text.drawString(graphics, "> " + (container.getInventory().getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + Text.getTruncatedString(container.getInventory().getCells().get(selectedCell + i).getType().getName(), 8) + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("courbd").deriveFont(28f));
 			}
 			else
 			{
-				Text.drawString(graphics, container.getInventory().getCells().get(selectedCell + i).getType().getName(), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("font").deriveFont(28f));
+				Text.drawString(graphics, (container.getInventory().getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + Text.getTruncatedString(container.getInventory().getCells().get(selectedCell + i).getType().getName(), 12), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("courbd").deriveFont(28f));
 			}
 		}
 		Item item = container.getInventory().getCells().get(selectedCell).getType();
 		graphics.drawImage(item.getSkin().getCurrentSkin(), invImageX, invImageY, invImageWidth, invImageHeight, null);
-		Text.drawString(graphics, "" + container.getInventory().getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("font").deriveFont(18f));
+		if(container.getInventory().getCells().get(selectedCell).getType() instanceof Equipment)
+		{
+			// equipment tag
+			Text.drawString(graphics, "[E]", invImageX - 7, invImageY + 14, false, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
+			// rarity tag
+			Text.drawString(graphics, "*", (invImageX + invImageWidth) - 18, invImageY + invImageHeight, false, Colors.gold1, Assets.fonts.get("courbd").deriveFont(18f));
+		}
+		Text.drawString(graphics, "" + container.getInventory().getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
 		graphics.drawImage(Assets.textures.get("inventoryLeft").getCurrentSkin(), transferLeftX, transferLeftY, transferLeftWidth, transferLeftHeight, null);
+		if((Engine.inputs.getX() > invImageX) && (Engine.inputs.getX() <= (invImageX + invImageWidth)))
+		{
+			if((Engine.inputs.getY() > invImageY) && (Engine.inputs.getY() <= (invImageY + invImageHeight)))
+			{
+				itemUI.setItem(container.getInventory().getCells().get(selectedCell).getType());
+				itemUI.setOpened(true);
+			}
+		}
+		else
+		{
+			itemUI.setOpened(false);
+		}
 	}
 
 	public int getTransferLeftX()
@@ -141,5 +166,10 @@ public class ItemContainerRenderer extends UI
 	{
 		selectedCell += amount;
 		return this;
+	}
+
+	public ItemUI getItemUI()
+	{
+		return itemUI;
 	}
 }

@@ -78,6 +78,7 @@ public class Entity extends GameObject
 
 		if(!collidesWithTiles(x / Tile.TILEWIDTH, (y / Tile.TILEHEIGHT) + offsetY))
 		{
+			path.clear();
 			if(!collidesWithObjects(x / Tile.TILEWIDTH, (y / Tile.TILEHEIGHT) + offsetY))
 			{
 				y += offsetY * Tile.TILEHEIGHT;
@@ -85,6 +86,7 @@ public class Entity extends GameObject
 		}
 		if(!collidesWithTiles((x / Tile.TILEWIDTH) + offsetX, y / Tile.TILEHEIGHT))
 		{
+			path.clear();
 			if(!collidesWithObjects((x / Tile.TILEWIDTH) + offsetX, y / Tile.TILEHEIGHT))
 			{
 				x += offsetX * Tile.TILEWIDTH;

@@ -25,6 +25,7 @@ public class InventoryRenderer extends UI
 	private int transferRightX, transferRightY, transferRightWidth, transferRigthHeight;
 
 	private int selectedCell = 0;
+	private ItemUI itemUI;
 
 	public InventoryRenderer(Inventory inventory)
 	{
@@ -35,6 +36,8 @@ public class InventoryRenderer extends UI
 		active = true;
 		opened = false;
 		canOpenInventory = true;
+		itemUI = new ItemUI(null);
+		Handler.getUis().add(itemUI);
 
 		width = skin.getCurrentSkin().getWidth();
 		height = skin.getCurrentSkin().getHeight();
@@ -62,26 +65,17 @@ public class InventoryRenderer extends UI
 		{
 			if(!openedContainer.isActive())
 			{
-				openedContainer = null;
-				canOpenInventory = true;
-				((InventoryRenderer)setX((Engine.getWidth() / 2) - (width / 2))).rebuild();
-				opened = false;
+				close();
 			}
 			if(!openedContainer.playerAround())
 			{
-				openedContainer = null;
-				canOpenInventory = true;
-				((InventoryRenderer)setX((Engine.getWidth() / 2) - (width / 2))).rebuild();
-				opened = false;
+				close();
 			}
 		}
 
 		if(Engine.inputs.isKeyPressed(Keyboard.E))
 		{
-			openedContainer = null;
-			canOpenInventory = true;
-			((InventoryRenderer)setX((Engine.getWidth() / 2) - (width / 2))).rebuild();
-			opened = false;
+			close();
 		}
 
 		if(openedContainer != null)
@@ -114,6 +108,7 @@ public class InventoryRenderer extends UI
 		// }
 		if(!opened)
 		{
+			close();
 			return;
 		}
 
@@ -123,6 +118,7 @@ public class InventoryRenderer extends UI
 			inventory.getCells().get(selectedCell).getType().getSkin().update(delta);
 		}
 
+		int r = 1;
 		if(openedContainer != null)
 		{
 			if(Handler.getObjectManager().getEntityManager().getPlayer().getRenderingInventory() == inventory)
@@ -138,7 +134,6 @@ public class InventoryRenderer extends UI
 							{
 								if(Engine.inputs.isButtonPressed(Mouse.ONE))
 								{
-									int r = 1;
 									if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
 									{
 										r = inventory.getCells().get(selectedCell).getSize();
@@ -192,16 +187,15 @@ public class InventoryRenderer extends UI
 						{
 							if(Engine.inputs.isButtonPressed(Mouse.ONE))
 							{
-								int r = 1;
 								if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
 								{
-									r = openedContainer.getInventory().getCells().get(selectedCell).getSize();
+									r = openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getSize();
 								}
 								for(int i = 0; i < r; i++)
 								{
-									if(Handler.getObjectManager().getEntityManager().getPlayer().getInventory().addItem(openedContainer.getInventory().getCells().get(selectedCell).getType()))
+									if(Handler.getObjectManager().getEntityManager().getPlayer().getInventory().addItem(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getType()))
 									{
-										openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(selectedCell));
+										openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()));
 									}
 								}
 							}
@@ -307,11 +301,11 @@ public class InventoryRenderer extends UI
 			}
 			if(i == 0)
 			{
-				Text.drawString(graphics, "> " + (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? " [E] " : "") + inventory.getCells().get(selectedCell + i).getType().getName() + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("font").deriveFont(28f));
+				Text.drawString(graphics, "> " + (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + Text.getTruncatedString(inventory.getCells().get(selectedCell + i).getType().getName(), 8) + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("courbd").deriveFont(28f));
 			}
 			else
 			{
-				Text.drawString(graphics, (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? " [E] " : "") + inventory.getCells().get(selectedCell + i).getType().getName(), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("font").deriveFont(28f));
+				Text.drawString(graphics, (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + Text.getTruncatedString(inventory.getCells().get(selectedCell + i).getType().getName(), 12), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("courbd").deriveFont(28f));
 			}
 		}
 		Item item = inventory.getCells().get(selectedCell).getType();
@@ -319,15 +313,36 @@ public class InventoryRenderer extends UI
 		if(inventory.getCells().get(selectedCell).getType() instanceof Equipment)
 		{
 			// equipment tag
-			Text.drawString(graphics, "[E]", invImageX - 7, invImageY + 14, false, Color.white, Assets.fonts.get("font").deriveFont(18f));
+			Text.drawString(graphics, "[E]", invImageX - 7, invImageY + 14, false, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
 			// rarity tag
-			Text.drawString(graphics, "*", (invImageX + invImageWidth) - 18, invImageY + invImageHeight, false, Colors.gold1, Assets.fonts.get("font").deriveFont(18f));
+			Text.drawString(graphics, "*", (invImageX + invImageWidth) - 18, invImageY + invImageHeight, false, Colors.gold1, Assets.fonts.get("courbd").deriveFont(18f));
 		}
-		Text.drawString(graphics, "" + inventory.getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("font").deriveFont(18f));
+		Text.drawString(graphics, "" + inventory.getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
 		if(openedContainer != null)
 		{
 			graphics.drawImage(Assets.textures.get("inventoryRight").getCurrentSkin(), transferRightX, transferRightY, transferRightWidth, transferRigthHeight, null);
 		}
+		if((Engine.inputs.getX() > invImageX) && (Engine.inputs.getX() <= (invImageX + invImageWidth)))
+		{
+			if((Engine.inputs.getY() > invImageY) && (Engine.inputs.getY() <= (invImageY + invImageHeight)))
+			{
+				itemUI.setItem(inventory.getCells().get(selectedCell).getType());
+				itemUI.setOpened(true);
+			}
+		}
+		else
+		{
+			itemUI.setOpened(false);
+		}
+	}
+
+	public void close()
+	{
+		openedContainer = null;
+		canOpenInventory = true;
+		((InventoryRenderer)setX((Engine.getWidth() / 2) - (width / 2))).rebuild();
+		opened = false;
+		itemUI.setOpened(false);
 	}
 
 	public UI rebuild()
@@ -368,5 +383,10 @@ public class InventoryRenderer extends UI
 	{
 		this.canOpenInventory = canOpenInventory;
 		return this;
+	}
+
+	public ItemUI getItemUI()
+	{
+		return itemUI;
 	}
 }

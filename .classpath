@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/BasicEngine"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JOML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Scalr"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

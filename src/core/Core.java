@@ -12,11 +12,13 @@ import objects.entities.Aggressive;
 import objects.entities.Entity;
 import objects.entities.Player;
 import objects.entities.containers.ItemContainer;
+import objects.items.equipments.Equipment;
 import physics.Camera;
 import physics.Handler;
 import registry.GameRegistry;
 import tiles.Tile;
 import uis.DamageUI;
+import uis.UI;
 import worlds.World;
 
 public class Core implements Instance
@@ -35,8 +37,7 @@ public class Core implements Instance
 		Handler.getObjectManager().add(new Aggressive("aggressive", Assets.textures.get("mouse"), 1, 1).createNew(10, 9).setSolid(true));
 		Handler.getObjectManager().add(new ItemContainer("itemContainer", Assets.textures.get("itemContainer"), 1, 1, 10).createNew(5, 5));
 		ItemContainer container = (ItemContainer)new ItemContainer("itemContainer", Assets.textures.get("itemContainer"), 1, 1, 10).createNew(8, 5);
-		// container.getInventory().addItem(new Item("stick",
-		// Assets.textures.get("stick"), 1, 1));
+		container.getInventory().addItem(new Equipment("legend knife", Assets.textures.get("knife"), 1, 1));
 		Handler.getObjectManager().add(container);
 		Handler.getUis().add(new DamageUI());
 	}
@@ -49,6 +50,10 @@ public class Core implements Instance
 			System.exit(0);
 		}
 		Handler.update(delta);
+		for(UI ui : Handler.getUis())
+		{
+			// System.out.println(ui);
+		}
 	}
 
 	@Override

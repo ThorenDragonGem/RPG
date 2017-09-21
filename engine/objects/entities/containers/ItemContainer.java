@@ -90,6 +90,10 @@ public class ItemContainer extends Entity
 	{
 		if(Handler.getUis().contains(renderer))
 		{
+			if(Handler.getUis().contains(renderer.getItemUI()))
+			{
+				Handler.getUis().remove(renderer.getItemUI());
+			}
 			Handler.getUis().remove(renderer);
 		}
 		return new ItemContainer(name, skin, width, height, inventory.getSlots()).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid);

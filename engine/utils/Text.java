@@ -20,10 +20,41 @@ public class Text
 		if(center)
 		{
 			FontMetrics fm = graphics.getFontMetrics();
-			x = xPos - fm.stringWidth(text) / 2;
-			y = (yPos - fm.getHeight() / 2) + fm.getAscent();
+			x = xPos - (fm.stringWidth(text) / 2);
+			y = (yPos - (fm.getHeight() / 2)) + fm.getAscent();
 		}
 		graphics.drawString(text, x, y);
+	}
+
+	/**
+	 * Draws a text truncated if text.length() > stringLength;
+	 */
+	public static void drawString(Graphics graphics, String text, int xPos, int yPos, int stringLength, boolean center, Color color, Font font)
+	{
+		graphics.setColor(color);
+		graphics.setFont(font);
+		int x = xPos;
+		int y = yPos;
+		if(text.length() > stringLength)
+		{
+			text = text.substring(0, stringLength);
+		}
+		if(center)
+		{
+			FontMetrics fm = graphics.getFontMetrics();
+			x = xPos - (fm.stringWidth(text) / 2);
+			y = (yPos - (fm.getHeight() / 2)) + fm.getAscent();
+		}
+		graphics.drawString(text, x, y);
+	}
+
+	public static String getTruncatedString(String originalText, int length)
+	{
+		if(originalText.length() > length)
+		{
+			return originalText.substring(0, length) + "\u2026";
+		}
+		return originalText;
 	}
 
 	/**
@@ -43,7 +74,9 @@ public class Text
 	public static String getThousandsStringd(double value)
 	{
 		if(value == 0)
+		{
 			return "0,00";
+		}
 		int thousands = 0;
 		double res = value;
 		while(res >= 1000)
@@ -70,7 +103,9 @@ public class Text
 	public static String getThousandsStringi(double value)
 	{
 		if(value == 0)
+		{
 			return "0";
+		}
 		int thousands = 0;
 		double res = value;
 		while(res >= 1000)

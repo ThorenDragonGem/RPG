@@ -33,7 +33,7 @@ public class Player extends Entity
 		{
 			inventory.addItem(new Item("rock", Assets.textures.get("rock"), 1, 1));
 		}
-		inventory.addItem(new Equipment("knife", Assets.textures.get("knife"), 1, 1));
+		inventory.addItem(new Equipment("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Assets.textures.get("knife"), 1, 1));
 	}
 
 	@Override
@@ -41,12 +41,11 @@ public class Player extends Entity
 	{
 		super.update(delta);
 		boolean mouseMove = false;
-		boolean keyMove = false;
 		renderingInventory = null;
 		inventory.update(delta);
 		int mouseTileX = 0, mouseTileY = 0;
 
-		if(Engine.inputs.isButtonDown(Mouse.THREE) && !keyMove)
+		if(Engine.inputs.isButtonDown(Mouse.THREE))
 		{
 			mouseMove = true;
 			mouseTileX = (int)((Engine.inputs.getX() + Handler.getCamera().getOffset().x) / Tile.TILEWIDTH);
@@ -74,7 +73,6 @@ public class Player extends Entity
 
 		if(!mouseMove)
 		{
-			keyMove = true;
 			int dx = 0;
 			int dy = 0;
 			if(Engine.inputs.isKeyDown(Keyboard.Z))
@@ -93,6 +91,10 @@ public class Player extends Entity
 			{
 				dx += 1;
 			}
+			if((dx != 0) || (dy != 0))
+			{
+				path.clear();
+			}
 			move(dx, dy);
 		}
 
@@ -109,6 +111,10 @@ public class Player extends Entity
 	{
 		if(Handler.getUis().contains(renderer))
 		{
+			if(Handler.getUis().contains(renderer.getItemUI()))
+			{
+				Handler.getUis().remove(renderer.getItemUI());
+			}
 			Handler.getUis().remove(renderer);
 		}
 		return new Player().setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
