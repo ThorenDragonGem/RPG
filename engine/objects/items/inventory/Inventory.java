@@ -9,6 +9,8 @@ import objects.items.Item;
 
 public class Inventory
 {
+	// TODO add List<InventoryCell> equipments cells => add equipment inventory
+	// => add new UI: EquipmentInventoryRenderer
 	protected List<InventoryCell> cells;
 	protected int slots;
 	protected Entity holder;
