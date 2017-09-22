@@ -1,10 +1,12 @@
 package core;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import assets.Assets;
 import engine.Engine;
 import engine.Instance;
+import gfx.TextFont;
 import inputs.Keyboard;
 import objects.ObjectManager;
 import objects.blocks.Block;
@@ -18,11 +20,14 @@ import physics.Handler;
 import registry.GameRegistry;
 import tiles.Tile;
 import uis.DamageUI;
-import uis.UI;
+import utils.Utils;
 import worlds.World;
 
 public class Core implements Instance
 {
+	BufferedImage image;
+	TextFont font;
+
 	@Override
 	public void init() throws Exception
 	{
@@ -40,6 +45,10 @@ public class Core implements Instance
 		container.getInventory().addItem(new Equipment("legend knife", Assets.textures.get("knife"), 1, 1));
 		Handler.getObjectManager().add(container);
 		Handler.getUis().add(new DamageUI());
+		image = Utils.buildImage(64, 64, BufferedImage.TYPE_INT_ARGB, Assets.textures.get("grass").getCurrentSkin(), Assets.textures.get("stick").getCurrentSkin());
+		// BufferedImage fontImage =
+		// DrawUtils.replace(Assets.textures.get("imageFont").getCurrentSkin(),
+		// Color.black, new Color(0, 0, 0, 255));
 	}
 
 	@Override
@@ -50,17 +59,18 @@ public class Core implements Instance
 			System.exit(0);
 		}
 		Handler.update(delta);
-		for(UI ui : Handler.getUis())
-		{
-			// System.out.println(ui);
-		}
+		// for(UI ui : Handler.getUis())
+		// {
+		// System.out.println(ui);
+		// }
 	}
 
 	@Override
 	public void render(Graphics graphics)
 	{
 		Handler.render(graphics);
-
+		// graphics.drawImage(Assets.textures.get("imageFont").getCurrentSkin(),
+		// 300, 300, null);
 		// graphics.drawLine(0, Engine.getHeight() / 2, Engine.getWidth(),
 		// Engine.getHeight() / 2);
 		// graphics.drawLine(Engine.getWidth() / 2, 0, Engine.getWidth() / 2,

@@ -14,7 +14,7 @@ import objects.items.Item;
 import objects.items.equipments.Equipment;
 import objects.items.inventory.Inventory;
 import physics.Handler;
-import utils.Text;
+import utils.TextUtils;
 
 public class InventoryRenderer extends UI
 {
@@ -331,11 +331,11 @@ public class InventoryRenderer extends UI
 			}
 			if(i == 0)
 			{
-				Text.drawString(graphics, "> " + (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + Text.getTruncatedString(inventory.getCells().get(selectedCell + i).getType().getName(), 8) + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("courbd").deriveFont(28f));
+				TextUtils.drawString(graphics, "> " + (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + TextUtils.getTruncatedString(inventory.getCells().get(selectedCell + i).getType().getName(), 8) + " <", invListCenterX, invListCenterY + (i * invListSpacing), true, Color.yellow, Assets.fonts.get("courbd").deriveFont(28f));
 			}
 			else
 			{
-				Text.drawString(graphics, (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + Text.getTruncatedString(inventory.getCells().get(selectedCell + i).getType().getName(), 12), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("courbd").deriveFont(28f));
+				TextUtils.drawString(graphics, (inventory.getCells().get(selectedCell + i).getType() instanceof Equipment ? "[E] " : "") + TextUtils.getTruncatedString(inventory.getCells().get(selectedCell + i).getType().getName(), 12), invListCenterX, invListCenterY + (i * invListSpacing), true, Color.white, Assets.fonts.get("courbd").deriveFont(28f));
 			}
 		}
 		Item item = inventory.getCells().get(selectedCell).getType();
@@ -343,11 +343,11 @@ public class InventoryRenderer extends UI
 		if(inventory.getCells().get(selectedCell).getType() instanceof Equipment)
 		{
 			// equipment tag
-			Text.drawString(graphics, "[E]", invImageX - 7, invImageY + 14, false, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
+			TextUtils.drawString(graphics, "[E]", invImageX - 7, invImageY + 14, false, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
 			// rarity tag
-			Text.drawString(graphics, "*", (invImageX + invImageWidth) - 18, invImageY + invImageHeight, false, Colors.gold1, Assets.fonts.get("courbd").deriveFont(18f));
+			TextUtils.drawString(graphics, "*", (invImageX + invImageWidth) - 18, invImageY + invImageHeight, false, Colors.gold1, Assets.fonts.get("courbd").deriveFont(18f));
 		}
-		Text.drawString(graphics, "" + inventory.getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
+		TextUtils.drawString(graphics, "" + inventory.getCells().get(selectedCell).getSize(), invCountX, invCountY, true, Color.white, Assets.fonts.get("courbd").deriveFont(18f));
 		if(openedContainer != null)
 		{
 			graphics.drawImage(Assets.textures.get("inventoryRight").getCurrentSkin(), transferRightX, transferRightY, transferRightWidth, transferRigthHeight, null);
