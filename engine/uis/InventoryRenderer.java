@@ -121,52 +121,121 @@ public class InventoryRenderer extends UI
 		int r = 1;
 		if(openedContainer != null)
 		{
-			if(Handler.getObjectManager().getEntityManager().getPlayer().getRenderingInventory() == inventory)
+			// transfer can be done independently of Mouse position
+
+			if(selectedCell < inventory.getCells().size())
 			{
-				if(selectedCell < inventory.getCells().size())
+				// right transfer
+				if(openedContainer != null)
 				{
-					// right transfer
-					if(openedContainer != null)
+					if((Engine.inputs.getX() >= transferRightX) && (Engine.inputs.getX() <= (transferRightX + transferRightWidth)))
 					{
-						if((Engine.inputs.getX() >= transferRightX) && (Engine.inputs.getX() <= (transferRightX + transferRightWidth)))
+						if((Engine.inputs.getY() >= transferRightY) && (Engine.inputs.getY() <= (transferRightY + transferRigthHeight)))
 						{
-							if((Engine.inputs.getY() >= transferRightY) && (Engine.inputs.getY() <= (transferRightY + transferRigthHeight)))
+							if(Engine.inputs.isButtonPressed(Mouse.ONE))
 							{
-								if(Engine.inputs.isButtonPressed(Mouse.ONE))
+								if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
 								{
-									if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
+									r = inventory.getCells().get(selectedCell).getSize();
+								}
+								for(int i = 0; i < r; i++)
+								{
+									if(openedContainer.getInventory().addItem(inventory.getCells().get(selectedCell).getType()))
 									{
-										r = inventory.getCells().get(selectedCell).getSize();
-									}
-									for(int i = 0; i < r; i++)
-									{
-										if(openedContainer.getInventory().addItem(inventory.getCells().get(selectedCell).getType()))
-										{
-											inventory.remove(inventory.getCells().get(selectedCell));
-										}
+										inventory.remove(inventory.getCells().get(selectedCell));
 									}
 								}
 							}
 						}
 					}
-					// TODO WIP - Drops in world and modify collisions boxes
-					// drops
-					// if(Engine.inputs.isKeyDown(Keyboard.ENTER))
-					// {
-					// Handler.getObjectManager().add(inventory.remove(inventory.getCells().get(selectedCell)).createNew((inventory.getHolder().getX()
-					// / Tile.TILEWIDTH) +
-					// (int)Mathf.random(-inventory.getHolder().getWidth() * 2,
-					// inventory.getHolder().getWidth() * 2),
-					// (inventory.getHolder().getY() / Tile.TILEHEIGHT) +
-					// (int)Mathf.random(-inventory.getHolder().getHeight() * 2,
-					// inventory.getHolder().getHeight() * 2)));
-					// if((inventory.getCells().size() > selectedCell) &&
-					// (inventory.getCells().get(selectedCell).getSize() == 0))
-					// {
-					// inventory.getCells().remove(selectedCell);
-					// }
-					// }
+					if(Engine.inputs.isKeyPressed(Keyboard.RIGHT))
+					{
+						if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
+						{
+							r = inventory.getCells().get(selectedCell).getSize();
+						}
+						for(int i = 0; i < r; i++)
+						{
+							if(openedContainer.getInventory().addItem(inventory.getCells().get(selectedCell).getType()))
+							{
+								inventory.remove(inventory.getCells().get(selectedCell));
+							}
+						}
+					}
 				}
+				// TODO WIP - Drops in world and modify collisions boxes
+				// drops
+				// if(Engine.inputs.isKeyDown(Keyboard.ENTER))
+				// {
+				// Handler.getObjectManager().add(inventory.remove(inventory.getCells().get(selectedCell)).createNew((inventory.getHolder().getX()
+				// / Tile.TILEWIDTH) +
+				// (int)Mathf.random(-inventory.getHolder().getWidth() * 2,
+				// inventory.getHolder().getWidth() * 2),
+				// (inventory.getHolder().getY() / Tile.TILEHEIGHT) +
+				// (int)Mathf.random(-inventory.getHolder().getHeight() * 2,
+				// inventory.getHolder().getHeight() * 2)));
+				// if((inventory.getCells().size() > selectedCell) &&
+				// (inventory.getCells().get(selectedCell).getSize() == 0))
+				// {
+				// inventory.getCells().remove(selectedCell);
+				// }
+				// }
+			}
+			if(selectedCell < openedContainer.getInventory().getCells().size())
+			{
+				// left transfer
+				if((Engine.inputs.getX() >= openedContainer.getRenderer().getTransferLeftX()) && (Engine.inputs.getX() <= (openedContainer.getRenderer().getTransferLeftX() + openedContainer.getRenderer().getTransferLeftWidth())))
+				{
+					if((Engine.inputs.getY() >= openedContainer.getRenderer().getTransferLeftY()) && (Engine.inputs.getY() <= (openedContainer.getRenderer().getTransferLeftY() + openedContainer.getRenderer().getTransferLeftHeight())))
+					{
+						if(Engine.inputs.isButtonPressed(Mouse.ONE) || Engine.inputs.isKeyPressed(Keyboard.LEFT))
+						{
+							if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
+							{
+								r = openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getSize();
+							}
+							for(int i = 0; i < r; i++)
+							{
+								if(Handler.getObjectManager().getEntityManager().getPlayer().getInventory().addItem(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getType()))
+								{
+									openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()));
+								}
+							}
+						}
+					}
+				}
+				if(Engine.inputs.isKeyPressed(Keyboard.LEFT))
+				{
+					if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
+					{
+						r = openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getSize();
+					}
+					for(int i = 0; i < r; i++)
+					{
+						if(Handler.getObjectManager().getEntityManager().getPlayer().getInventory().addItem(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getType()))
+						{
+							openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()));
+						}
+					}
+				}
+
+				// container drops
+				// if(Engine.inputs.isKeyDown(Keyboard.ENTER))
+				// {
+				// Handler.getObjectManager().add(openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(selectedCell)).createNew((openedContainer.getX()
+				// / Tile.TILEWIDTH) + 2, (openedContainer.getY() /
+				// Tile.TILEHEIGHT) + 2));
+				// if((openedContainer.getInventory().getCells().size() >
+				// selectedCell) &&
+				// (openedContainer.getInventory().getCells().get(selectedCell).getSize()
+				// == 0))
+				// {
+				// openedContainer.getInventory().getCells().remove(selectedCell);
+				// }
+				// }
+			}
+			if(Handler.getObjectManager().getEntityManager().getPlayer().getRenderingInventory() == inventory)
+			{
 				if((Engine.inputs.getScrollY() < 0) || Engine.inputs.isKeyPressed(Keyboard.UP))
 				{
 					selectedCell--;
@@ -178,44 +247,6 @@ public class InventoryRenderer extends UI
 			}
 			else if(Handler.getObjectManager().getEntityManager().getPlayer().getRenderingInventory() == openedContainer.getInventory())
 			{
-				if(selectedCell < openedContainer.getInventory().getCells().size())
-				{
-					// left transfer
-					if((Engine.inputs.getX() >= openedContainer.getRenderer().getTransferLeftX()) && (Engine.inputs.getX() <= (openedContainer.getRenderer().getTransferLeftX() + openedContainer.getRenderer().getTransferLeftWidth())))
-					{
-						if((Engine.inputs.getY() >= openedContainer.getRenderer().getTransferLeftY()) && (Engine.inputs.getY() <= (openedContainer.getRenderer().getTransferLeftY() + openedContainer.getRenderer().getTransferLeftHeight())))
-						{
-							if(Engine.inputs.isButtonPressed(Mouse.ONE))
-							{
-								if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
-								{
-									r = openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getSize();
-								}
-								for(int i = 0; i < r; i++)
-								{
-									if(Handler.getObjectManager().getEntityManager().getPlayer().getInventory().addItem(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getType()))
-									{
-										openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()));
-									}
-								}
-							}
-						}
-					}
-					// container drops
-					// if(Engine.inputs.isKeyDown(Keyboard.ENTER))
-					// {
-					// Handler.getObjectManager().add(openedContainer.getInventory().remove(openedContainer.getInventory().getCells().get(selectedCell)).createNew((openedContainer.getX()
-					// / Tile.TILEWIDTH) + 2, (openedContainer.getY() /
-					// Tile.TILEHEIGHT) + 2));
-					// if((openedContainer.getInventory().getCells().size() >
-					// selectedCell) &&
-					// (openedContainer.getInventory().getCells().get(selectedCell).getSize()
-					// == 0))
-					// {
-					// openedContainer.getInventory().getCells().remove(selectedCell);
-					// }
-					// }
-				}
 				if((Engine.inputs.getScrollY() < 0) || Engine.inputs.isKeyPressed(Keyboard.UP))
 				{
 					openedContainer.getRenderer().addSelectedCell(-1);
@@ -233,7 +264,6 @@ public class InventoryRenderer extends UI
 				{
 					openedContainer.getRenderer().setSelectedCell(0);
 				}
-
 			}
 		}
 		else
