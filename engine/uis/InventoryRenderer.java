@@ -181,15 +181,16 @@ public class InventoryRenderer extends UI
 				// }
 				// }
 			}
-			if(selectedCell < openedContainer.getInventory().getCells().size())
+			if(openedContainer.getRenderer().getSelectedCell() < openedContainer.getInventory().getCells().size())
 			{
 				// left transfer
 				if((Engine.inputs.getX() >= openedContainer.getRenderer().getTransferLeftX()) && (Engine.inputs.getX() <= (openedContainer.getRenderer().getTransferLeftX() + openedContainer.getRenderer().getTransferLeftWidth())))
 				{
 					if((Engine.inputs.getY() >= openedContainer.getRenderer().getTransferLeftY()) && (Engine.inputs.getY() <= (openedContainer.getRenderer().getTransferLeftY() + openedContainer.getRenderer().getTransferLeftHeight())))
 					{
-						if(Engine.inputs.isButtonPressed(Mouse.ONE) || Engine.inputs.isKeyPressed(Keyboard.LEFT))
+						if(Engine.inputs.isButtonPressed(Mouse.ONE))
 						{
+							System.out.println(true);
 							if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
 							{
 								r = openedContainer.getInventory().getCells().get(openedContainer.getRenderer().getSelectedCell()).getSize();

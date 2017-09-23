@@ -4,11 +4,11 @@ import java.awt.Graphics;
 
 import gfx.Skin2D;
 
-public class Helm extends Equipment
+public class Weapon extends Equipment
 {
-	// TODO adds characteristics and defense
+	// TODO shields, swords, axes...
 
-	public Helm(String name, Skin2D skin, int width, int height)
+	public Weapon(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
 	}

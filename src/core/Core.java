@@ -10,7 +10,6 @@ import gfx.TextFont;
 import inputs.Keyboard;
 import objects.ObjectManager;
 import objects.blocks.Block;
-import objects.entities.Aggressive;
 import objects.entities.Entity;
 import objects.entities.Player;
 import objects.entities.containers.ItemContainer;
@@ -39,7 +38,8 @@ public class Core implements Instance
 		new ObjectManager(new Player());
 		Handler.getObjectManager().add(new Block("block", Assets.textures.get("rock"), 1, 1).createNew(3, 6));
 		Handler.getObjectManager().add(new Entity("pine", Assets.textures.get("pine"), 1, 2).setSolid(true).createNew(10, 5).setBounds(0, 1, 1, 1));
-		Handler.getObjectManager().add(new Aggressive("aggressive", Assets.textures.get("mouse"), 1, 1).createNew(10, 9).setSolid(true));
+		// Handler.getObjectManager().add(new Aggressive("aggressive",
+		// Assets.textures.get("mouse"), 1, 1).createNew(10, 9).setSolid(true));
 		Handler.getObjectManager().add(new ItemContainer("itemContainer", Assets.textures.get("itemContainer"), 1, 1, 10).createNew(5, 5));
 		ItemContainer container = (ItemContainer)new ItemContainer("itemContainer", Assets.textures.get("itemContainer"), 1, 1, 10).createNew(8, 5);
 		container.getInventory().addItem(new Equipment("legend knife", Assets.textures.get("knife"), 1, 1));

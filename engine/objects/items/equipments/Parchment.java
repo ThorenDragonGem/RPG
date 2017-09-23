@@ -4,11 +4,11 @@ import java.awt.Graphics;
 
 import gfx.Skin2D;
 
-public class Helm extends Equipment
+public class Parchment extends Equipment
 {
-	// TODO adds characteristics and defense
+	// TODO parchment with active or/and passive spells
 
-	public Helm(String name, Skin2D skin, int width, int height)
+	public Parchment(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
 	}

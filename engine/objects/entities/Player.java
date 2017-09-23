@@ -9,7 +9,11 @@ import inputs.Keyboard;
 import inputs.Mouse;
 import objects.GameObject;
 import objects.items.Item;
+import objects.items.equipments.Chestplate;
 import objects.items.equipments.Equipment;
+import objects.items.equipments.Parchment;
+import objects.items.equipments.Weapon;
+import objects.items.inventory.EquipmentInventory;
 import objects.items.inventory.Inventory;
 import physics.Handler;
 import tiles.Tile;
@@ -20,12 +24,17 @@ public class Player extends Entity
 	private Inventory inventory;
 	private Inventory renderingInventory;
 	private InventoryRenderer renderer;
+	private EquipmentInventory inv;
 
 	public Player()
 	{
 		super("player", new Animation(150, Assets.getArray("idle", 0, 2)), 1, 1);
 		inventory = new Inventory(this, 10);
 		renderer = new InventoryRenderer(inventory);
+		inv = new EquipmentInventory(this, Weapon.class, Parchment.class, Chestplate.class, Parchment.class);
+		inv.setEquipment(new Weapon("legendary sword", null, 0, 0), 0);
+		inv.setEquipment(new Parchment("Parchment of Heaven's Light", null, 0, 0), 0);
+		inv.setEquipment(new Parchment("SCRIPT!", null, 0, 0), 1);
 		priority = 10;
 		Handler.getUis().add(renderer);
 		renderingInventory = null;
@@ -33,17 +42,26 @@ public class Player extends Entity
 		{
 			inventory.addItem(new Item("rock", Assets.textures.get("rock"), 1, 1));
 		}
-		inventory.addItem(new Equipment("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", Assets.textures.get("knife"), 1, 1));
+		inventory.addItem(new Equipment("z au zheiu apuauzpu", Assets.textures.get("knife"), 1, 1));
 	}
 
 	@Override
 	public void update(double delta)
 	{
 		super.update(delta);
+		System.out.println(inv);
 		boolean mouseMove = false;
 		renderingInventory = null;
 		inventory.update(delta);
 		int mouseTileX = 0, mouseTileY = 0;
+
+		if(Engine.inputs.isKeyPressed(Keyboard.R))
+		{
+			inv.setEquipment(new Weapon(Double.toString(Math.random() * 100000000000d), null, 0, 0), 0);
+			inv.setEquipment(new Chestplate(Double.toString(Math.random() * 100000000000d), null, 0, 0), 0);
+			inv.setEquipment(new Parchment(Double.toString(Math.random() * 100000000000d), null, 0, 0), 0);
+			inv.setEquipment(new Parchment(Double.toString(Math.random() * 100000000000d), null, 0, 0), 1);
+		}
 
 		if(Engine.inputs.isButtonDown(Mouse.THREE))
 		{
