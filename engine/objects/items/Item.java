@@ -13,7 +13,7 @@ public class Item extends GameObject
 	public Item(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
-		this.stackSize = 64;
+		stackSize = 64;
 	}
 
 	@Override

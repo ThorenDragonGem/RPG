@@ -7,8 +7,8 @@ public class BaseAttribute
 
 	public BaseAttribute(double value, double multiplier)
 	{
-		this.baseValue = value;
-		this.baseMultiplier = multiplier;
+		baseValue = value;
+		baseMultiplier = multiplier;
 	}
 
 	public BaseAttribute(double value)

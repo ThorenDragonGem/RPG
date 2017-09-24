@@ -1,9 +1,9 @@
 package objects.items;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import engine.Engine;
@@ -41,7 +41,7 @@ public class ItemManager
 
 	public ItemManager()
 	{
-		items = new ArrayList<>();
+		items = new LinkedList<>();
 	}
 
 	public void update(double delta)

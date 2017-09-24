@@ -4,13 +4,14 @@ public class CoolDown
 {
 	private long length, endTime;
 	private boolean started = false;
+
 	/**
 	 * @param length the attack delay in ms
 	 */
 	public CoolDown(long length)
 	{
 		this.length = length;
-		this.endTime = length;
+		endTime = length;
 	}
 
 	public void update()

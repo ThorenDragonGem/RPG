@@ -1,9 +1,9 @@
 package objects.entities;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import engine.Engine;
@@ -43,7 +43,7 @@ public class EntityManager
 	public EntityManager(Player player)
 	{
 		this.player = (Player)player.createNew(1, 1);
-		entities = new ArrayList<>();
+		entities = new LinkedList<>();
 		add(this.player);
 	}
 

@@ -31,7 +31,7 @@ public class DamageUI extends UI
 	@Override
 	public void update(double delta)
 	{
-//		System.err.println(Handler.getUis().get(Handler.getUis().size() - 1));
+
 	}
 
 	@Override

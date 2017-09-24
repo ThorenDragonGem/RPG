@@ -10,7 +10,7 @@ public class DependantAttribute extends Attribute
 	public DependantAttribute(double startingValue)
 	{
 		super(startingValue);
-		otherAttributes = new HashMap<String, Attribute>();
+		otherAttributes = new HashMap<>();
 	}
 
 	public void addAttribute(String name, Attribute attribute)
@@ -21,20 +21,28 @@ public class DependantAttribute extends Attribute
 	public void removeAttribute(String name)
 	{
 		if(otherAttributes.containsKey(name))
+		{
 			otherAttributes.remove(name);
+		}
 	}
 
 	public void removeAttribute(Attribute attribute)
 	{
 		for(String name : otherAttributes.keySet())
+		{
 			if(otherAttributes.get(name) == attribute)
+			{
 				otherAttributes.remove(name);
+			}
+		}
 	}
 
 	public void removeAll()
 	{
 		for(Attribute attribute : otherAttributes.values())
+		{
 			removeAttribute(attribute);
+		}
 	}
 
 	@Override
@@ -43,12 +51,16 @@ public class DependantAttribute extends Attribute
 		if(otherAttributes.values().size() == 0)
 		{
 			for(FinalBonus bonus : finalBonuses)
+			{
 				bonus.update();
+			}
 		}
 		else
 		{
 			for(Attribute attribute : otherAttributes.values())
+			{
 				attribute.updateFinalBonus();
+			}
 		}
 	}
 

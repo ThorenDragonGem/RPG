@@ -12,7 +12,7 @@ public class Block extends GameObject
 	public Block(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
-		this.solid = true;
+		solid = true;
 	}
 
 	@Override

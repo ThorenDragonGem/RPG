@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * A simple example for the usage of this package.
- * 
+ *
  * @see ExampleFactory
  * @see ExampleNode
  */
@@ -28,7 +28,7 @@ public class ExampleUsage
 	 */
 	public static void main(String[] args)
 	{
-		Map<ExampleNode> myMap = new Map<ExampleNode>(50, 50, new ExampleFactory());
+		Map<ExampleNode> myMap = new Map<>(50, 50, new ExampleFactory());
 		List<ExampleNode> path = myMap.findPath(0, 0, 40, 40);
 
 		for(int i = 0; i < path.size(); i++)
@@ -36,5 +36,4 @@ public class ExampleUsage
 			System.out.print("(" + path.get(i).getxPosition() + ", " + path.get(i).getyPosition() + ") -> ");
 		}
 	}
-
 }

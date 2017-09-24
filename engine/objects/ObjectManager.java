@@ -3,6 +3,7 @@ package objects;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import engine.Engine;
@@ -26,7 +27,7 @@ public class ObjectManager
 	public ObjectManager(Player player)
 	{
 		Handler.setObjectManager(this);
-		objects = new ArrayList<>();
+		objects = new LinkedList<>();
 		entities = new EntityManager(player);
 		blocks = new BlockManager();
 		items = new ItemManager();

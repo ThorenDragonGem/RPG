@@ -23,5 +23,4 @@ public class ExampleFactory implements NodeFactory
 	{
 		return new ExampleNode(x, y);
 	}
-
 }

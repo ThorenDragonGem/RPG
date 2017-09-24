@@ -1,7 +1,7 @@
 package objects.entities;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import gfx.Skin2D;
@@ -19,7 +19,7 @@ public class Entity extends GameObject
 	public Entity(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
-		path = new ArrayList<>();
+		path = new LinkedList<>();
 		moveCD = new CoolDown(7);
 		moveCD.go();
 	}
@@ -63,7 +63,7 @@ public class Entity extends GameObject
 			if(index > (path.size() - 1))
 			{
 				index = 0;
-				path = new ArrayList<>();
+				path = new LinkedList<>();
 			}
 		}
 		checkWorldLimits();

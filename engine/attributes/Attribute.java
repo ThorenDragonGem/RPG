@@ -12,8 +12,8 @@ public class Attribute extends BaseAttribute
 	public Attribute(double startingValue)
 	{
 		super(startingValue);
-		rawBonuses = new CopyOnWriteArrayList<RawBonus>();
-		finalBonuses = new CopyOnWriteArrayList<FinalBonus>();
+		rawBonuses = new CopyOnWriteArrayList<>();
+		finalBonuses = new CopyOnWriteArrayList<>();
 		finalValue = getBaseValue();
 	}
 
@@ -31,7 +31,9 @@ public class Attribute extends BaseAttribute
 	public void removeRawBonus(RawBonus bonus)
 	{
 		if(rawBonuses.contains(bonus))
+		{
 			rawBonuses.remove(bonus);
+		}
 	}
 
 	public void removeFinalBonus(FinalBonus bonus)
@@ -82,8 +84,12 @@ public class Attribute extends BaseAttribute
 	public void updateFinalBonus()
 	{
 		for(FinalBonus bonus : finalBonuses)
+		{
 			if(bonus.getTimer() != null)
+			{
 				bonus.update();
+			}
+		}
 	}
 
 	public List<RawBonus> getRawBonuses()

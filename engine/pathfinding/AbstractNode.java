@@ -40,7 +40,6 @@ package pathfinding;
  */
 public abstract class AbstractNode
 {
-
 	/** costs to move sideways from one square to another. */
 	protected static final int BASICMOVEMENTCOST = 10;
 	/** costs to move diagonally from one square to another. */
@@ -79,8 +78,8 @@ public abstract class AbstractNode
 	{
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		this.walkable = true;
-		this.movementPanelty = 0;
+		walkable = true;
+		movementPanelty = 0;
 	}
 
 	/**
@@ -102,7 +101,7 @@ public abstract class AbstractNode
 	 */
 	public void setIsDiagonaly(boolean isDiagonaly)
 	{
-		this.diagonally = isDiagonaly;
+		diagonally = isDiagonaly;
 	}
 
 	/**
@@ -113,8 +112,8 @@ public abstract class AbstractNode
 	 */
 	public void setCoordinates(int x, int y)
 	{
-		this.xPosition = x;
-		this.yPosition = y;
+		xPosition = x;
+		yPosition = y;
 	}
 
 	/**
@@ -349,11 +348,11 @@ public abstract class AbstractNode
 			return false;
 		}
 		final AbstractNode other = (AbstractNode)obj;
-		if(this.xPosition != other.xPosition)
+		if(xPosition != other.xPosition)
 		{
 			return false;
 		}
-		if(this.yPosition != other.yPosition)
+		if(yPosition != other.yPosition)
 		{
 			return false;
 		}
@@ -369,9 +368,8 @@ public abstract class AbstractNode
 	public int hashCode()
 	{
 		int hash = 3;
-		hash = 17 * hash + this.xPosition;
-		hash = 17 * hash + this.yPosition;
+		hash = (17 * hash) + xPosition;
+		hash = (17 * hash) + yPosition;
 		return hash;
 	}
-
 }

@@ -9,14 +9,12 @@ import inputs.Keyboard;
 import inputs.Mouse;
 import objects.GameObject;
 import objects.items.Item;
-import objects.items.equipments.Chestplate;
-import objects.items.equipments.Equipment;
-import objects.items.equipments.Parchment;
-import objects.items.equipments.Weapon;
+import objects.items.equipments.*;
 import objects.items.inventory.EquipmentInventory;
 import objects.items.inventory.Inventory;
 import physics.Handler;
 import tiles.Tile;
+import uis.EquipmentInventoryRenderer;
 import uis.InventoryRenderer;
 
 public class Player extends Entity
@@ -25,35 +23,45 @@ public class Player extends Entity
 	private Inventory renderingInventory;
 	private InventoryRenderer renderer;
 	private EquipmentInventory inv;
+	private EquipmentInventoryRenderer equipmentInventoryRenderer;
 
 	public Player()
 	{
 		super("player", new Animation(150, Assets.getArray("idle", 0, 2)), 1, 1);
 		inventory = new Inventory(this, 10);
 		renderer = new InventoryRenderer(inventory);
-		inv = new EquipmentInventory(this, Weapon.class, Parchment.class, Chestplate.class, Parchment.class);
-		inv.setEquipment(new Weapon("legendary sword", null, 0, 0), 0);
-		inv.setEquipment(new Parchment("Parchment of Heaven's Light", null, 0, 0), 0);
-		inv.setEquipment(new Parchment("SCRIPT!", null, 0, 0), 1);
+
+		inv = new EquipmentInventory(this, Helm.class, Chestplate.class, Belt.class, Greaves.class, Boot.class, Boot.class, Talisman.class, Talisman.class, ShoulderPad.class, ShoulderPad.class, Armband.class, Armband.class, Gauntlets.class, Gauntlets.class, Weapon.class, Weapon.class, Mantle.class, Parchment.class);
+		inv.setEquipment(new Weapon("legendary sword", Assets.getTexture("knife"), 1, 1), 0);
+		inv.setEquipment(new Weapon("Shield of the Black Star", Assets.getTexture("shield"), 1, 1), 1);
+		inv.setEquipment(new Parchment("SCRIPT!", null, 0, 0), 0);
+		inv.setEquipment(new Helm("Helm of Light", Assets.getTexture("helmet"), 1, 1), 0);
+		inv.setEquipment(new Chestplate("Dragon Chestplate of Fire", Assets.getTexture("chest"), 1, 1), 0);
+		equipmentInventoryRenderer = new EquipmentInventoryRenderer(inv);
+		Handler.getUis().add(equipmentInventoryRenderer);
 		priority = 10;
 		Handler.getUis().add(renderer);
 		renderingInventory = null;
 		for(int i = 0; i < 100; i++)
 		{
-			inventory.addItem(new Item("rock", Assets.textures.get("rock"), 1, 1));
+			inventory.addItem(new Item("rock", Assets.getTexture("rock"), 1, 1));
 		}
-		inventory.addItem(new Equipment("z au zheiu apuauzpu", Assets.textures.get("knife"), 1, 1));
+		inventory.addItem(new Equipment("z au zheiu apuauzpu", Assets.getTexture("knife"), 1, 1));
 	}
 
 	@Override
 	public void update(double delta)
 	{
 		super.update(delta);
-		System.out.println(inv);
 		boolean mouseMove = false;
 		renderingInventory = null;
 		inventory.update(delta);
 		int mouseTileX = 0, mouseTileY = 0;
+
+		if(Engine.inputs.isKeyPressed(Keyboard.F))
+		{
+			equipmentInventoryRenderer.setOpened(!equipmentInventoryRenderer.isOpened());
+		}
 
 		if(Engine.inputs.isKeyPressed(Keyboard.R))
 		{
@@ -134,6 +142,10 @@ public class Player extends Entity
 				Handler.getUis().remove(renderer.getItemUI());
 			}
 			Handler.getUis().remove(renderer);
+		}
+		if(Handler.getUis().contains(equipmentInventoryRenderer))
+		{
+			Handler.getUis().remove(equipmentInventoryRenderer);
 		}
 		return new Player().setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
 	}

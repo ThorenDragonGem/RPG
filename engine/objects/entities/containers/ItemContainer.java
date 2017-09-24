@@ -27,8 +27,8 @@ public class ItemContainer extends Entity
 		super(name, skin, width, height);
 		inventory = new Inventory(this, slots);
 		renderer = new ItemContainerRenderer(this);
-		inventory.addItem(new Item("rock", Assets.textures.get("rock"), 1, 1));
-		inventory.addItem(new Item("stick", Assets.textures.get("stick"), 1, 1));
+		inventory.addItem(new Item("rock", Assets.getTexture("rock"), 1, 1));
+		inventory.addItem(new Item("stick", Assets.getTexture("stick"), 1, 1));
 		Handler.getUis().add(renderer);
 		maxTime = -1;// 60 * 100;
 		time = maxTime;

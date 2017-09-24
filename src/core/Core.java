@@ -31,23 +31,23 @@ public class Core implements Instance
 	public void init() throws Exception
 	{
 		new Handler();
-		GameRegistry.registerTile("default_tile", new Tile(Assets.textures.get("grass")));
-		GameRegistry.registerTile("rock_tile", new Tile(Assets.textures.get("rockTile")).setSolid(true));
+		GameRegistry.registerTile("default_tile", new Tile(Assets.getTexture("grass")));
+		GameRegistry.registerTile("rock_tile", new Tile(Assets.getTexture("rockTile")).setSolid(true));
 		new Camera();
 		new World(100, 100);
 		new ObjectManager(new Player());
-		Handler.getObjectManager().add(new Block("block", Assets.textures.get("rock"), 1, 1).createNew(3, 6));
-		Handler.getObjectManager().add(new Entity("pine", Assets.textures.get("pine"), 1, 2).setSolid(true).createNew(10, 5).setBounds(0, 1, 1, 1));
+		Handler.getObjectManager().add(new Block("block", Assets.getTexture("rock"), 1, 1).createNew(3, 6));
+		Handler.getObjectManager().add(new Entity("pine", Assets.getTexture("pine"), 1, 2).setSolid(true).createNew(10, 5).setBounds(0, 1, 1, 1));
 		// Handler.getObjectManager().add(new Aggressive("aggressive",
-		// Assets.textures.get("mouse"), 1, 1).createNew(10, 9).setSolid(true));
-		Handler.getObjectManager().add(new ItemContainer("itemContainer", Assets.textures.get("itemContainer"), 1, 1, 10).createNew(5, 5));
-		ItemContainer container = (ItemContainer)new ItemContainer("itemContainer", Assets.textures.get("itemContainer"), 1, 1, 10).createNew(8, 5);
-		container.getInventory().addItem(new Equipment("legend knife", Assets.textures.get("knife"), 1, 1));
+		// Assets.getTexture("mouse"), 1, 1).createNew(10, 9).setSolid(true));
+		Handler.getObjectManager().add(new ItemContainer("itemContainer", Assets.getTexture("itemContainer"), 1, 1, 10).createNew(5, 5));
+		ItemContainer container = (ItemContainer)new ItemContainer("itemContainer", Assets.getTexture("itemContainer"), 1, 1, 10).createNew(8, 5);
+		container.getInventory().addItem(new Equipment("legend knife", Assets.getTexture("knife"), 1, 1));
 		Handler.getObjectManager().add(container);
 		Handler.getUis().add(new DamageUI());
-		image = Utils.buildImage(64, 64, BufferedImage.TYPE_INT_ARGB, Assets.textures.get("grass").getCurrentSkin(), Assets.textures.get("stick").getCurrentSkin());
+		image = Utils.buildImage(64, 64, BufferedImage.TYPE_INT_ARGB, Assets.getTexture("grass").getCurrentSkin(), Assets.getTexture("stick").getCurrentSkin());
 		// BufferedImage fontImage =
-		// DrawUtils.replace(Assets.textures.get("imageFont").getCurrentSkin(),
+		// DrawUtils.replace(Assets.getTexture("imageFont").getCurrentSkin(),
 		// Color.black, new Color(0, 0, 0, 255));
 	}
 
@@ -69,7 +69,7 @@ public class Core implements Instance
 	public void render(Graphics graphics)
 	{
 		Handler.render(graphics);
-		// graphics.drawImage(Assets.textures.get("imageFont").getCurrentSkin(),
+		// graphics.drawImage(Assets.getTexture("imageFont").getCurrentSkin(),
 		// 300, 300, null);
 		// graphics.drawLine(0, Engine.getHeight() / 2, Engine.getWidth(),
 		// Engine.getHeight() / 2);

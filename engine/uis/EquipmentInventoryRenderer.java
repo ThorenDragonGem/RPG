@@ -1,60 +1,99 @@
 package uis;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joml.Vector2i;
+
+import assets.Assets;
+import engine.Engine;
+import objects.items.inventory.EquipmentCell;
+import objects.items.inventory.EquipmentInventory;
 
 public class EquipmentInventoryRenderer extends UI
 {
+	private EquipmentInventory inventory;
+	private List<Vector2i> cellsPositions;
+
 	private int imageWidth = 64, imageHeight = 64;
-	// helm
-	private int helmX = 184, helmY = 16;
-	// chestplate
-	private int chestplateX = 184, chestplateY = 116;
-	// belt
-	private int beltX = 184, beltY = 209;
-	// greaves
-	private int greavesX = 184, greavesY = 290;
-	// boot1
-	private int boot1X = 441, boot1Y = 373;
-	// boot2
-	private int boot2X = 228, boot2Y = 373;
-	// talisman1
-	private int talisman1X = 52, talisman1Y = 27;
-	// talisman2
-	private int talisman2X = 316, talisman2Y = 27;
-	// shoulderpad1
-	private int shoulderPad1X = 92, shoulderPad1Y = 101;
-	// shoulderpad2
-	private int shoulderPad2X = 276, shoulderPad2Y = 101;
-	// armband1
-	private int armband1X = 92, armband1Y = 182;
-	// armband2
-	private int armband2X = 276, armband2Y = 182;
-	// gauntlets1
-	private int gauntlets1X = 100, gauntlets1Y = 263;
-	// gauntlets2
-	private int gauntlets2X = 268, gauntlets2Y = 263;
-	// weapon1
-	private int weapon1X = 19, weapon1Y = 344;
-	// weapon2
-	private int weapon2X = 349, weapon2Y = 344;
-	// mantle
-	private int mantleX = 354, mantleY = 168;
-	// parchment
-	private int parchmetnX = 14, parchmentY = 167;
 
-	public EquipmentInventoryRenderer()
+	public EquipmentInventoryRenderer(EquipmentInventory inventory)
 	{
-
+		this.inventory = inventory;
+		cellsPositions = new ArrayList<>();
+		// helm
+		cellsPositions.add(new Vector2i(184, 16));
+		// chestplate
+		cellsPositions.add(new Vector2i(184, 116));
+		// belt
+		cellsPositions.add(new Vector2i(184, 209));
+		// greaves
+		cellsPositions.add(new Vector2i(184, 290));
+		// boot1
+		cellsPositions.add(new Vector2i(441, 373));
+		// boot2
+		cellsPositions.add(new Vector2i(228, 373));
+		// talisman1
+		cellsPositions.add(new Vector2i(52, 27));
+		// talisman2
+		cellsPositions.add(new Vector2i(316, 27));
+		// shoulderpad1
+		cellsPositions.add(new Vector2i(92, 101));
+		// shoulderpad2
+		cellsPositions.add(new Vector2i(276, 101));
+		// armband1
+		cellsPositions.add(new Vector2i(92, 182));
+		// armband2
+		cellsPositions.add(new Vector2i(276, 182));
+		// gauntlets1
+		cellsPositions.add(new Vector2i(100, 263));
+		// gauntlets2
+		cellsPositions.add(new Vector2i(268, 263));
+		// weapon1
+		cellsPositions.add(new Vector2i(19, 344));
+		// weapon2
+		cellsPositions.add(new Vector2i(349, 344));
+		// mantle
+		cellsPositions.add(new Vector2i(354, 168));
+		// parchment
+		cellsPositions.add(new Vector2i(14, 167));
+		active = true;
+		active = true;
+		skin = Assets.getTexture("equipmentInv");
+		width = 432;
+		height = 464;
+		x = (Engine.getWidth() / 2) - (width / 2);
+		y = (Engine.getHeight() / 2) - (height / 2);
+		priority = 80;
 	}
 
 	@Override
 	public void update(double delta)
 	{
+		if(!opened)
+		{
+			return;
+		}
 	}
 
 	@Override
 	public void render(Graphics graphics)
 	{
+		if(!opened)
+		{
+			return;
+		}
+		graphics.drawImage(skin.getCurrentSkin(), x, y, width, height, null);
+		int i = 0;
+		for(EquipmentCell cell : inventory.getEquipmentInventory())
+		{
+			if((cell != null) && (cell.getEquipment() != null) && (cell.getEquipment().getSkin() != null))
+			{
+				graphics.drawImage(cell.getEquipment().getSkin().getCurrentSkin(), x + cellsPositions.get(i).x, y + cellsPositions.get(i).y, imageWidth, imageHeight, null);
+			}
+			i++;
+		}
 	}
 
 }

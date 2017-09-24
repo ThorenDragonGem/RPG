@@ -1,9 +1,9 @@
 package physics;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import engine.Engine;
@@ -39,7 +39,7 @@ public class Handler
 	public Handler()
 	{
 		Handler.handler = this;
-		uis = new ArrayList<>();
+		uis = new LinkedList<>();
 	}
 
 	public static void update(double delta)

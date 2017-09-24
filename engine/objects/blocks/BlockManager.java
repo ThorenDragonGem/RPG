@@ -1,9 +1,9 @@
 package objects.blocks;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import engine.Engine;
@@ -41,7 +41,7 @@ public class BlockManager
 
 	public BlockManager()
 	{
-		blocks = new ArrayList<>();
+		blocks = new LinkedList<>();
 	}
 
 	public void update(double delta)

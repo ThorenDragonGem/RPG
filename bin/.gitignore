@@ -4,3 +4,10 @@
 /objects/
 /core/
 /textures/
+/attributes/
+/physics/
+/pathfinding/
+/registry/
+/tiles/
+/times/
+/worlds/
