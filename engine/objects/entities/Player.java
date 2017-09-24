@@ -22,31 +22,48 @@ public class Player extends Entity
 	private Inventory inventory;
 	private Inventory renderingInventory;
 	private InventoryRenderer renderer;
-	private EquipmentInventory inv;
+	private EquipmentInventory equipmentInv;
 	private EquipmentInventoryRenderer equipmentInventoryRenderer;
 
 	public Player()
 	{
 		super("player", new Animation(150, Assets.getArray("idle", 0, 2)), 1, 1);
-		inventory = new Inventory(this, 10);
-		renderer = new InventoryRenderer(inventory);
-
-		inv = new EquipmentInventory(this, Helm.class, Chestplate.class, Belt.class, Greaves.class, Boot.class, Boot.class, Talisman.class, Talisman.class, ShoulderPad.class, ShoulderPad.class, Armband.class, Armband.class, Gauntlets.class, Gauntlets.class, Weapon.class, Weapon.class, Mantle.class, Parchment.class);
-		inv.setEquipment(new Weapon("legendary sword", Assets.getTexture("knife"), 1, 1), 0);
-		inv.setEquipment(new Weapon("Shield of the Black Star", Assets.getTexture("shield"), 1, 1), 1);
-		inv.setEquipment(new Parchment("SCRIPT!", null, 0, 0), 0);
-		inv.setEquipment(new Helm("Helm of Light", Assets.getTexture("helmet"), 1, 1), 0);
-		inv.setEquipment(new Chestplate("Dragon Chestplate of Fire", Assets.getTexture("chest"), 1, 1), 0);
-		equipmentInventoryRenderer = new EquipmentInventoryRenderer(inv);
-		Handler.getUis().add(equipmentInventoryRenderer);
 		priority = 10;
-		Handler.getUis().add(renderer);
-		renderingInventory = null;
+
+		inventory = new Inventory(this, 10);
 		for(int i = 0; i < 100; i++)
 		{
 			inventory.addItem(new Item("rock", Assets.getTexture("rock"), 1, 1));
 		}
-		inventory.addItem(new Equipment("z au zheiu apuauzpu", Assets.getTexture("knife"), 1, 1));
+		inventory.addItem(new Weapon("Knife", Assets.getTexture("knife"), 1, 1));
+		inventory.addItem(new Helm("Helm", Assets.getTexture("stick"), 1, 1));
+		inventory.addItem(new Talisman("Talisman", Assets.getTexture("rock"), 1, 1));
+		renderer = new InventoryRenderer(inventory);
+
+		equipmentInv = new EquipmentInventory(this, Helm.class, Chestplate.class, Belt.class, Greaves.class, Boot.class, Boot.class, Talisman.class, Talisman.class, ShoulderPad.class, ShoulderPad.class, Armband.class, Armband.class, Gauntlet.class, Gauntlet.class, Weapon.class, Weapon.class, Parchment.class, Mantle.class);
+		equipmentInv.setEquipment(new Helm("Helm of Light", Assets.getTexture("helm"), 1, 1), 0);
+		equipmentInv.setEquipment(new Chestplate("Dragon Chestplate of Fire", Assets.getTexture("chest"), 1, 1), 0);
+		equipmentInv.setEquipment(new Belt("Belt", Assets.getTexture("belt"), 1, 1), 0);
+		equipmentInv.setEquipment(new Greaves("Greaves", Assets.getTexture("greaves"), 1, 1), 0);
+		equipmentInv.setEquipment(new Boot("Boot1", Assets.getTexture("boot"), 1, 1), 0);
+		equipmentInv.setEquipment(new Boot("Boot2", Assets.getTexture("boot"), 1, 1), 1);
+		equipmentInv.setEquipment(new Talisman("Clock of the Ligth", Assets.getTexture("talisman1"), 1, 1), 0);
+		equipmentInv.setEquipment(new Talisman("Clock of the Shadow", Assets.getTexture("talisman2"), 1, 1), 1);
+		equipmentInv.setEquipment(new ShoulderPad("ShoulderPad1", Assets.getTexture("shoulderpad"), 1, 1), 0);
+		equipmentInv.setEquipment(new ShoulderPad("ShoulderPad2", Assets.getTexture("shoulderpad"), 1, 1), 1);
+		equipmentInv.setEquipment(new Armband("Armband1", Assets.getTexture("armband"), 1, 1), 0);
+		equipmentInv.setEquipment(new Armband("Armband1", Assets.getTexture("armband"), 1, 1), 1);
+		equipmentInv.setEquipment(new Gauntlet("Gauntlet1", Assets.getTexture("gauntlet"), 1, 1), 0);
+		equipmentInv.setEquipment(new Gauntlet("Gauntlet2", Assets.getTexture("gauntlet"), 1, 1), 1);
+		equipmentInv.setEquipment(new Parchment("SCRIPT!", Assets.getTexture("script"), 0, 0), 0);
+		equipmentInv.setEquipment(new Mantle("Mantle", Assets.getTexture("mantle"), 1, 1), 0);
+		equipmentInv.setEquipment(new Weapon("legendary sword", Assets.getTexture("knife"), 1, 1), 0);
+		equipmentInv.setEquipment(new Weapon("Shield of the Black Star", Assets.getTexture("shield"), 1, 1), 1);
+		equipmentInventoryRenderer = new EquipmentInventoryRenderer(equipmentInv);
+
+		Handler.getUis().add(renderer);
+		Handler.getUis().add(equipmentInventoryRenderer);
+		renderingInventory = null;
 	}
 
 	@Override
@@ -58,20 +75,7 @@ public class Player extends Entity
 		inventory.update(delta);
 		int mouseTileX = 0, mouseTileY = 0;
 
-		if(Engine.inputs.isKeyPressed(Keyboard.F))
-		{
-			equipmentInventoryRenderer.setOpened(!equipmentInventoryRenderer.isOpened());
-		}
-
-		if(Engine.inputs.isKeyPressed(Keyboard.R))
-		{
-			inv.setEquipment(new Weapon(Double.toString(Math.random() * 100000000000d), null, 0, 0), 0);
-			inv.setEquipment(new Chestplate(Double.toString(Math.random() * 100000000000d), null, 0, 0), 0);
-			inv.setEquipment(new Parchment(Double.toString(Math.random() * 100000000000d), null, 0, 0), 0);
-			inv.setEquipment(new Parchment(Double.toString(Math.random() * 100000000000d), null, 0, 0), 1);
-		}
-
-		if(Engine.inputs.isButtonDown(Mouse.THREE))
+		if(Engine.inputs.isButtonDown(Mouse.RIGHT))
 		{
 			mouseMove = true;
 			mouseTileX = (int)((Engine.inputs.getX() + Handler.getCamera().getOffset().x) / Tile.TILEWIDTH);
@@ -169,5 +173,21 @@ public class Player extends Entity
 	public Inventory getInventory()
 	{
 		return inventory;
+	}
+
+	public EquipmentInventory getEquipmentInventory()
+	{
+		return equipmentInv;
+	}
+
+	public Player setEquipmentInventoryRenderer(EquipmentInventoryRenderer equipmentInventoryRenderer)
+	{
+		this.equipmentInventoryRenderer = equipmentInventoryRenderer;
+		return this;
+	}
+
+	public EquipmentInventoryRenderer getEquipmentInventoryRenderer()
+	{
+		return equipmentInventoryRenderer;
 	}
 }

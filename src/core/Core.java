@@ -1,5 +1,6 @@
 package core;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -19,11 +20,13 @@ import physics.Handler;
 import registry.GameRegistry;
 import tiles.Tile;
 import uis.DamageUI;
+import utils.TextUtils;
 import utils.Utils;
 import worlds.World;
 
 public class Core implements Instance
 {
+	public static boolean paused;
 	BufferedImage image;
 	TextFont font;
 
@@ -42,6 +45,8 @@ public class Core implements Instance
 		// Assets.getTexture("mouse"), 1, 1).createNew(10, 9).setSolid(true));
 		Handler.getObjectManager().add(new ItemContainer("itemContainer", Assets.getTexture("itemContainer"), 1, 1, 10).createNew(5, 5));
 		ItemContainer container = (ItemContainer)new ItemContainer("itemContainer", Assets.getTexture("itemContainer"), 1, 1, 10).createNew(8, 5);
+		// TODO NullPointerException on adding 'Equipment' => check if more than
+		// an Equipment (such as Weapon, Parchment...)
 		container.getInventory().addItem(new Equipment("legend knife", Assets.getTexture("knife"), 1, 1));
 		Handler.getObjectManager().add(container);
 		Handler.getUis().add(new DamageUI());
@@ -58,7 +63,12 @@ public class Core implements Instance
 		{
 			System.exit(0);
 		}
+		// if(Engine.inputs.isKeyPressed(Keyboard.P))
+		// {
+		// paused = !paused;
+		// }
 		Handler.update(delta);
+
 		// for(UI ui : Handler.getUis())
 		// {
 		// System.out.println(ui);
@@ -75,6 +85,11 @@ public class Core implements Instance
 		// Engine.getHeight() / 2);
 		// graphics.drawLine(Engine.getWidth() / 2, 0, Engine.getWidth() / 2,
 		// Engine.getHeight());
+
+		if(paused)
+		{
+			TextUtils.drawString(graphics, "Paused", Engine.getWidth() / 2, 30, true, Color.red, Assets.getFont("courbd").deriveFont(38f));
+		}
 	}
 
 }

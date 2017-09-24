@@ -15,6 +15,12 @@ public class EquipmentCell
 
 	public Equipment set(Equipment equipment)
 	{
+		if(equipment == null)
+		{
+			Equipment last = this.equipment;
+			this.equipment = null;
+			return last;
+		}
 		if(type.equals(getSuperClasses(equipment)))
 		{
 			Equipment last = this.equipment;

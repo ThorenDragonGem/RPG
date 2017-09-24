@@ -56,7 +56,7 @@ public class ItemContainerRenderer extends UI
 	public void update(double delta)
 	{
 		skin.update(delta);
-		if(container.playerAround() && ((((int)(Engine.inputs.getX() + Handler.getCamera().getOffset().x) / Tile.TILEWIDTH) == (container.getX() / Tile.TILEWIDTH)) && (((int)(Engine.inputs.getY() + Handler.getCamera().getOffset().y) / Tile.TILEHEIGHT) == (container.getY() / Tile.TILEHEIGHT))) && Engine.inputs.isButtonPressed(Mouse.ONE))
+		if(container.playerAround() && ((((int)(Engine.inputs.getX() + Handler.getCamera().getOffset().x) / Tile.TILEWIDTH) == (container.getX() / Tile.TILEWIDTH)) && (((int)(Engine.inputs.getY() + Handler.getCamera().getOffset().y) / Tile.TILEHEIGHT) == (container.getY() / Tile.TILEHEIGHT))) && Engine.inputs.isButtonPressed(Mouse.LEFT) && !Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().isOpened())
 		{
 			opened = true;
 		}

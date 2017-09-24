@@ -75,7 +75,17 @@ public class ObjectManager
 		items.update(delta);
 		// next entities
 		entities.update(delta);
+	}
 
+	public void updateRender(double delta)
+	{
+		for(GameObject object : objects)
+		{
+			object.updateRender(delta);
+		}
+		blocks.updateRender(delta);
+		items.updateRender(delta);
+		entities.updateRender(delta);
 	}
 
 	public void render(Graphics graphics)

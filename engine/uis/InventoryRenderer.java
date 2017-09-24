@@ -3,7 +3,11 @@ package uis;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.joml.Vector2i;
+import org.joml.Vector4i;
+
 import assets.Assets;
+import core.Core;
 import engine.Engine;
 import gfx.Colors;
 import inputs.Keyboard;
@@ -53,27 +57,29 @@ public class InventoryRenderer extends UI
 			GameObject container = null;
 			if(((container = Handler.getWorld().getPickedObject()) instanceof ItemContainer))
 			{
-				if(((ItemContainer)container).playerAround() && Engine.inputs.isButtonPressed(Mouse.ONE))
+				if(((ItemContainer)container).playerAround() && Engine.inputs.isButtonPressed(Mouse.LEFT) && !Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().isOpened())
 				{
+					System.out.println(true);
 					openedContainer = (ItemContainer)container;
 					canOpenInventory = false;
 				}
 			}
 		}
 
-		if(openedContainer != null)
-		{
-			if(!openedContainer.isActive())
-			{
-				close();
-			}
-			if(!openedContainer.playerAround())
-			{
-				close();
-			}
-		}
+		// paused => can't move and not updated
+		// if(openedContainer != null)
+		// {
+		// if(!openedContainer.isActive())
+		// {
+		// close();
+		// }
+		// if(!openedContainer.playerAround())
+		// {
+		// close();
+		// }
+		// }
 
-		if(Engine.inputs.isKeyPressed(Keyboard.E))
+		if(Engine.inputs.isKeyPressed(Keyboard.E) && !Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().isOpened())
 		{
 			close();
 		}
@@ -95,6 +101,11 @@ public class InventoryRenderer extends UI
 		if(Engine.inputs.isKeyPressed(Keyboard.I) && canOpenInventory)
 		{
 			opened = !opened;
+			if(opened)
+			{
+				x = (Engine.getWidth() / 2) + 30;
+				rebuild();
+			}
 		}
 
 		// TODO don't want to pause when opening inventory!
@@ -109,6 +120,13 @@ public class InventoryRenderer extends UI
 		if(!opened)
 		{
 			close();
+			return;
+		}
+		Core.paused = true;
+
+		if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().isOpened())
+		{
+			updateEquipmentInventory();
 			return;
 		}
 
@@ -132,7 +150,7 @@ public class InventoryRenderer extends UI
 					{
 						if((Engine.inputs.getY() >= transferRightY) && (Engine.inputs.getY() <= (transferRightY + transferRigthHeight)))
 						{
-							if(Engine.inputs.isButtonPressed(Mouse.ONE))
+							if(Engine.inputs.isButtonPressed(Mouse.LEFT))
 							{
 								if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
 								{
@@ -188,7 +206,7 @@ public class InventoryRenderer extends UI
 				{
 					if((Engine.inputs.getY() >= openedContainer.getRenderer().getTransferLeftY()) && (Engine.inputs.getY() <= (openedContainer.getRenderer().getTransferLeftY() + openedContainer.getRenderer().getTransferLeftHeight())))
 					{
-						if(Engine.inputs.isButtonPressed(Mouse.ONE))
+						if(Engine.inputs.isButtonPressed(Mouse.LEFT))
 						{
 							System.out.println(true);
 							if(Engine.inputs.isKeyDown(Keyboard.SHIFT))
@@ -309,6 +327,93 @@ public class InventoryRenderer extends UI
 		}
 	}
 
+	private void updateEquipmentInventory()
+	{
+		// TODO when cells (to select) are empty, fill the first 'left' (index
+		// 0) by RightClick ; if the next one is empty, fill with a new
+		// RightClick
+		// TODO if you want to transfer 'select' Equipment but you have not
+		// selected a cell, fill automatically the first left (index 0)
+
+		// transfer to inventory
+		for(Vector2i v : Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getCellsPositions())
+		{
+			if(Engine.inputs.isButtonPressed(Mouse.RIGHT))
+			{
+				if((Engine.inputs.getX() > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getX() + v.x)) && (Engine.inputs.getX() <= (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getX() + v.x + 64)))
+				{
+					if((Engine.inputs.getY() > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getY() + v.y)) && (Engine.inputs.getY() <= (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getY() + v.y + 64)))
+					{
+						int index = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getIndex(v);
+						if(index == -1)
+						{
+							break;
+						}
+						if(inventory.addItem(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(index).getEquipment()))
+						{
+							Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(index).set(null);
+						}
+					}
+				}
+			}
+		}
+
+		Item item = inventory.getCells().get(selectedCell).getType();
+		if(item instanceof Equipment)
+		{
+			Vector4i selCell = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getSelectedCell();
+			// TODO cool idea with ButtonDown but need to add a CoolDown on it
+			if((Engine.inputs.getX() > ((Engine.getWidth() / 2) + 30)) && Engine.inputs.isButtonDown(Mouse.RIGHT))
+			{
+				if(selCell == null)
+				{
+					if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).size() == 1)
+					{
+						Equipment last = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).get(0)).getEquipment();
+						// if inventory full can swap equipments
+						// do not if(addItem())!
+						inventory.addItem(last);
+						inventory.remove(inventory.getCells().get(selectedCell));
+						Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, 0);
+					}
+				}
+				else
+				{
+					if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).size() == 1)
+					{
+						return;
+					}
+					if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getSuperClasses((Equipment)item).equals(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getSelectionPos().get(selCell)))
+					{
+						Equipment last = selCell.x > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getWidth() / 2) ? Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).get(1)).getEquipment() : Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).get(0)).getEquipment();
+						inventory.addItem(last);
+						inventory.remove(inventory.getCells().get(selectedCell));
+						Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, selCell.x > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getWidth() / 2) ? 1 : 0);
+					}
+				}
+			}
+		}
+
+		if((Engine.inputs.getScrollY() < 0) || Engine.inputs.isKeyPressed(Keyboard.UP))
+		{
+			selectedCell--;
+		}
+		if((Engine.inputs.getScrollY() > 0) || Engine.inputs.isKeyPressed(Keyboard.DOWN))
+		{
+			selectedCell++;
+		}
+		if(selectedCell < 0)
+
+		{
+			selectedCell = inventory.getCells().size() - 1;
+		}
+		else if(selectedCell >= inventory.getCells().size())
+		{
+			selectedCell = 0;
+		}
+
+	}
+
 	@Override
 	public void render(Graphics graphics)
 	{
@@ -374,6 +479,7 @@ public class InventoryRenderer extends UI
 		((InventoryRenderer)setX((Engine.getWidth() / 2) - (width / 2))).rebuild();
 		opened = false;
 		itemUI.setOpened(false);
+		Core.paused = false;
 	}
 
 	public UI rebuild()
@@ -419,5 +525,10 @@ public class InventoryRenderer extends UI
 	public ItemUI getItemUI()
 	{
 		return itemUI;
+	}
+
+	public int getSelectedCell()
+	{
+		return selectedCell;
 	}
 }

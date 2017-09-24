@@ -53,15 +53,7 @@ public class EntityManager
 		while(it.hasNext())
 		{
 			Entity e = it.next();
-			// isPaused() ?
-			// if(!Engine.isPaused())
-			// {
-			// e.update(delta);
-			// }
-			// else if(e instanceof Player)
-			// {
 			e.update(delta);
-			// }
 			if(!e.isActive())
 			{
 				it.remove();
@@ -69,6 +61,14 @@ public class EntityManager
 		}
 		entities.sort(renderSorter);
 		Handler.getCamera().centerOnPosition(player.getX(), player.getY());
+	}
+
+	public void updateRender(double delta)
+	{
+		for(Entity entity : entities)
+		{
+			entity.updateRender(delta);
+		}
 	}
 
 	public void render(Graphics graphics)

@@ -36,6 +36,16 @@ public class GameObject
 
 	public void update(double delta)
 	{
+
+	}
+
+	/**
+	 * Use only when modifying rendering updates
+	 * Impervious to Game Pause
+	 * @param delta
+	 */
+	public void updateRender(double delta)
+	{
 		skin.update(delta);
 	}
 

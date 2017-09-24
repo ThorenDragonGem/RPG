@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import engine.Engine;
+import core.Core;
 import objects.ObjectManager;
 import uis.UI;
 import utils.Mathf;
@@ -50,10 +50,11 @@ public class Handler
 		}
 		if(manager != null)
 		{
-			if(!Engine.isPaused())
+			if(!Core.paused)
 			{
 				manager.update(delta);
 			}
+			manager.updateRender(delta);
 		}
 		Iterator<UI> it = uis.iterator();
 		while(it.hasNext())

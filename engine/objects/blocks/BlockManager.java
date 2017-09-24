@@ -59,6 +59,14 @@ public class BlockManager
 		blocks.sort(renderSorter);
 	}
 
+	public void updateRender(double delta)
+	{
+		for(Block block : blocks)
+		{
+			block.updateRender(delta);
+		}
+	}
+
 	public void render(Graphics graphics)
 	{
 		for(Block block : blocks)

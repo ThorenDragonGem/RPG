@@ -4,11 +4,11 @@ import java.awt.Graphics;
 
 import gfx.Skin2D;
 
-public class Gauntlets extends Equipment
+public class Gauntlet extends Equipment
 {
 	// TODO adds characteristics and defense
 
-	public Gauntlets(String name, Skin2D skin, int width, int height)
+	public Gauntlet(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
 	}

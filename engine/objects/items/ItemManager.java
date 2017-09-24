@@ -59,6 +59,14 @@ public class ItemManager
 		items.sort(renderSorter);
 	}
 
+	public void updateRender(double delta)
+	{
+		for(Item item : items)
+		{
+			item.updateRender(delta);
+		}
+	}
+
 	public void render(Graphics graphics)
 	{
 		for(Item item : items)

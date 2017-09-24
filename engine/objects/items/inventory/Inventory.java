@@ -33,6 +33,10 @@ public class Inventory
 
 	public boolean addItem(Item item)
 	{
+		if(item == null)
+		{
+			return true;
+		}
 		for(int i = 0; i < slots; i++)
 		{
 			if((cells.size() > i) && cells.get(i).getType().getName().equals(item.getName()))
