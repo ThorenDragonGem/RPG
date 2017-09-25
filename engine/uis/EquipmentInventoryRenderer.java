@@ -175,6 +175,12 @@ public class EquipmentInventoryRenderer extends UI
 		return cellsPositions;
 	}
 
+	public EquipmentInventoryRenderer setSelectedCell(Vector4i selectedCell)
+	{
+		this.selectedCell = selectedCell;
+		return this;
+	}
+
 	public Vector4i getSelectedCell()
 	{
 		return selectedCell;

@@ -35,9 +35,14 @@ public class Player extends Entity
 		{
 			inventory.addItem(new Item("rock", Assets.getTexture("rock"), 1, 1));
 		}
-		inventory.addItem(new Weapon("Knife", Assets.getTexture("knife"), 1, 1));
-		inventory.addItem(new Helm("Helm", Assets.getTexture("stick"), 1, 1));
-		inventory.addItem(new Talisman("Talisman", Assets.getTexture("rock"), 1, 1));
+		inventory.addItem(new Boot("Diamond", Assets.getTexture("boot3"), 1, 1));
+		inventory.addItem(new Boot("Gold", Assets.getTexture("boot4"), 1, 1));
+		// inventory.addItem(new Weapon("Knife", Assets.getTexture("knife"), 1,
+		// 1));
+		// inventory.addItem(new Helm("Helm", Assets.getTexture("stick"), 1,
+		// 1));
+		// inventory.addItem(new Talisman("Talisman", Assets.getTexture("rock"),
+		// 1, 1));
 		renderer = new InventoryRenderer(inventory);
 
 		equipmentInv = new EquipmentInventory(this, Helm.class, Chestplate.class, Belt.class, Greaves.class, Boot.class, Boot.class, Talisman.class, Talisman.class, ShoulderPad.class, ShoulderPad.class, Armband.class, Armband.class, Gauntlet.class, Gauntlet.class, Weapon.class, Weapon.class, Parchment.class, Mantle.class);
@@ -45,8 +50,8 @@ public class Player extends Entity
 		equipmentInv.setEquipment(new Chestplate("Dragon Chestplate of Fire", Assets.getTexture("chest"), 1, 1), 0);
 		equipmentInv.setEquipment(new Belt("Belt", Assets.getTexture("belt"), 1, 1), 0);
 		equipmentInv.setEquipment(new Greaves("Greaves", Assets.getTexture("greaves"), 1, 1), 0);
-		equipmentInv.setEquipment(new Boot("Boot1", Assets.getTexture("boot"), 1, 1), 0);
-		equipmentInv.setEquipment(new Boot("Boot2", Assets.getTexture("boot"), 1, 1), 1);
+		equipmentInv.setEquipment(new Boot("Leather", Assets.getTexture("boot1"), 1, 1), 0);
+		equipmentInv.setEquipment(new Boot("Iron", Assets.getTexture("boot2"), 1, 1), 1);
 		equipmentInv.setEquipment(new Talisman("Clock of the Ligth", Assets.getTexture("talisman1"), 1, 1), 0);
 		equipmentInv.setEquipment(new Talisman("Clock of the Shadow", Assets.getTexture("talisman2"), 1, 1), 1);
 		equipmentInv.setEquipment(new ShoulderPad("ShoulderPad1", Assets.getTexture("shoulderpad"), 1, 1), 0);

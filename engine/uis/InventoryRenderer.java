@@ -2,6 +2,7 @@ package uis;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.List;
 
 import org.joml.Vector2i;
 import org.joml.Vector4i;
@@ -363,32 +364,65 @@ public class InventoryRenderer extends UI
 		{
 			Vector4i selCell = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getSelectedCell();
 			// TODO cool idea with ButtonDown but need to add a CoolDown on it
-			if((Engine.inputs.getX() > ((Engine.getWidth() / 2) + 30)) && Engine.inputs.isButtonDown(Mouse.RIGHT))
+			if((Engine.inputs.getX() > ((Engine.getWidth() / 2) + 30)) && Engine.inputs.isButtonPressed(Mouse.RIGHT))
 			{
+				List<Integer> indexes = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item);
 				if(selCell == null)
 				{
-					if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).size() == 1)
+					if(indexes.size() == 1)
 					{
-						Equipment last = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).get(0)).getEquipment();
+						Equipment last = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(0)).getEquipment();
 						// if inventory full can swap equipments
 						// do not if(addItem())!
 						inventory.addItem(last);
 						inventory.remove(inventory.getCells().get(selectedCell));
 						Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, 0);
 					}
+					else
+					{
+						if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(1)).getEquipment() == null)
+						{
+							if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(0)).getEquipment() == null)
+							{
+								// if 1 is null and 0 is null, place Equipment
+								// on 0
+								Equipment last = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(0)).getEquipment();
+								inventory.addItem(last);
+								inventory.remove(inventory.getCells().get(selectedCell));
+								Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, 0);
+							}
+							else
+							{
+								// if 1 is null and 0 not null, place Equipment
+								// on 1
+								Equipment last = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(1)).getEquipment();
+								inventory.addItem(last);
+								inventory.remove(inventory.getCells().get(selectedCell));
+								Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, 1);
+							}
+						}
+						else
+						{
+							Equipment last = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(0)).getEquipment();
+							inventory.addItem(last);
+							inventory.remove(inventory.getCells().get(selectedCell));
+							Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, 0);
+						}
+					}
 				}
 				else
 				{
-					if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).size() == 1)
+					if(indexes.size() == 1)
 					{
 						return;
 					}
 					if(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getSuperClasses((Equipment)item).equals(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getSelectionPos().get(selCell)))
 					{
-						Equipment last = selCell.x > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getWidth() / 2) ? Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).get(1)).getEquipment() : Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentIndexes((Equipment)item).get(0)).getEquipment();
+						Equipment last = selCell.x > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getWidth() / 2) ? Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(1)).getEquipment() : Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().getEquipmentInventory().get(indexes.get(0)).getEquipment();
 						inventory.addItem(last);
 						inventory.remove(inventory.getCells().get(selectedCell));
 						Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventory().setEquipment((Equipment)item, selCell.x > (Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getWidth() / 2) ? 1 : 0);
+						Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().setSelectedCell(null);
 					}
 				}
 			}
