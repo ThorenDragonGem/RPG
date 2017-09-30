@@ -9,12 +9,6 @@ import objects.items.equipments.Equipment;
 
 public class EquipmentInventory
 {
-	// TODO add HashMap<Equipment, Integer> equipments cells => add equipment
-	// inventory => closed inventory so attribute Equipment to its specific cell
-	// (or one of the two: talismans and weapons)
-	// => add new UI: EquipmentInventoryRenderer
-	// protected List<Equipment> equipmentInventory;
-	// protected HashMap<Integer, Equipment> equipmentInventory;
 	protected List<EquipmentCell> equipmentInventory;
 	protected Entity holder;
 	protected int slots;

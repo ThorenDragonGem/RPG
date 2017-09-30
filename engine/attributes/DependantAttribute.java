@@ -7,9 +7,9 @@ public class DependantAttribute extends Attribute
 {
 	protected Map<String, Attribute> otherAttributes;
 
-	public DependantAttribute(double startingValue)
+	public DependantAttribute(double startingValue, double multiplier)
 	{
-		super(startingValue);
+		super(startingValue, multiplier);
 		otherAttributes = new HashMap<>();
 	}
 
@@ -50,10 +50,7 @@ public class DependantAttribute extends Attribute
 	{
 		if(otherAttributes.values().size() == 0)
 		{
-			for(FinalBonus bonus : finalBonuses)
-			{
-				bonus.update();
-			}
+			super.updateFinalBonus();
 		}
 		else
 		{
@@ -75,11 +72,23 @@ public class DependantAttribute extends Attribute
 		{
 			finalValue += attribute.calculateValue();
 		}
+		finalValue *= (1 + multiplier);
 		return finalValue;
 	}
 
 	public Map<String, Attribute> getAttributes()
 	{
 		return otherAttributes;
+	}
+
+	@Override
+	public String toString()
+	{
+		String string = "";
+		for(Attribute a : otherAttributes.values())
+		{
+			string += a;
+		}
+		return string;
 	}
 }

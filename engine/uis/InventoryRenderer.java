@@ -14,7 +14,7 @@ import gfx.Colors;
 import inputs.Keyboard;
 import inputs.Mouse;
 import objects.GameObject;
-import objects.entities.containers.ItemContainer;
+import objects.entities.statics.containers.ItemContainer;
 import objects.items.Item;
 import objects.items.equipments.Equipment;
 import objects.items.inventory.Inventory;
@@ -330,9 +330,6 @@ public class InventoryRenderer extends UI
 
 	private void updateEquipmentInventory()
 	{
-		// TODO when cells (to select) are empty, fill the first 'left' (index
-		// 0) by RightClick ; if the next one is empty, fill with a new
-		// RightClick
 		// TODO if you want to transfer 'select' Equipment but you have not
 		// selected a cell, fill automatically the first left (index 0)
 
@@ -359,8 +356,13 @@ public class InventoryRenderer extends UI
 			}
 		}
 
+		// when cells (to select) are empty, fill the first 'left' (index
+		// 0) by RightClick ; if the next one is empty, fill with a new
+		// RightClick
 		Item item = inventory.getCells().get(selectedCell).getType();
-		if(item instanceof Equipment)
+		// can't add 'just' an Equipment item => but Equipment to add must
+		// extends Equipment
+		if((item instanceof Equipment) && !item.getClass().getName().contains("Equipment"))
 		{
 			Vector4i selCell = Handler.getObjectManager().getEntityManager().getPlayer().getEquipmentInventoryRenderer().getSelectedCell();
 			// TODO cool idea with ButtonDown but need to add a CoolDown on it

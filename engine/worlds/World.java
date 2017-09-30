@@ -54,6 +54,27 @@ public class World
 		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 0, 5);
 		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 0, 6);
 		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 2, 2);
+
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 1);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 4);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 5);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 6);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 8);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 9);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 10);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 11);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 12);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 13);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 14);
+
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 0, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 1, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 2, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 3, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 4, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 6, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 7, 7);
+		setTile(GameRegistry.getTilesRegister().get("rock_tile"), 8, 7);
 	}
 
 	public void update(double delta)
@@ -109,6 +130,11 @@ public class World
 	public void setSolid(boolean solid, int x, int y)
 	{
 		map.getNode(x, y).setWalkable(!solid);
+	}
+
+	public boolean isSolid(int x, int y)
+	{
+		return map.getNode(x, y).isWalkable();
 	}
 
 	public GameObject getPickedObject()

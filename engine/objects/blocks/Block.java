@@ -28,8 +28,15 @@ public class Block extends GameObject
 	}
 
 	@Override
-	public GameObject createNew(int x, int y)
+	public GameObject createNew(int x, int y, boolean virgin)
 	{
-		return new Block(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid);
+		if(virgin)
+		{
+			return new Block(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid).setPriority(priority);
+		}
+		else
+		{
+			return new Block(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid).setBounds(bounds).setPriority(priority);
+		}
 	}
 }

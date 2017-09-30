@@ -24,7 +24,7 @@ public class DamageUI extends UI
 		{
 			damages[i] = Scalr.resize(damages[i], width, height);
 		}
-		skin = new Animation(100, damages);
+		skin = new Animation(100, damages, true);
 		skin.setCurrentSkin(null);
 	}
 

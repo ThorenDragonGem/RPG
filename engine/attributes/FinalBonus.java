@@ -43,4 +43,10 @@ public class FinalBonus extends BaseAttribute
 	{
 		return cd;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "[f:" + getBaseValue() + "x" + getBaseMultiplier() + "]";
+	}
 }

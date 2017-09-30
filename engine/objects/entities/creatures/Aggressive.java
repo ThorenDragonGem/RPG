@@ -1,17 +1,17 @@
-package objects.entities;
+package objects.entities.creatures;
 
 import java.awt.Graphics;
 
 import gfx.Skin2D;
 import objects.GameObject;
+import objects.entities.Entity;
 import physics.Handler;
 import physics.Physics;
 import tiles.Tile;
 
-public class Aggressive extends Entity
+public class Aggressive extends Creature
 {
-	protected Entity target;
-
+	
 	public Aggressive(String name, Skin2D skin, int width, int height)
 	{
 		super(name, skin, width, height);
@@ -59,7 +59,8 @@ public class Aggressive extends Entity
 	{
 		for(Entity e : Physics.getEntitiesCircle(x / Tile.TILEWIDTH, y / Tile.TILEHEIGHT, 5))
 		{
-			if(e instanceof Player)
+			if((e instanceof Creature) && (e != this))
+			// if(e instanceof Player)
 			{
 				target = e;
 			}
@@ -75,7 +76,8 @@ public class Aggressive extends Entity
 
 	protected void attack()
 	{
-		System.out.println("Aggressive.attack()");
+		// System.out.println("Aggressive.attack()");
+		((Creature)target).health--;
 	}
 
 	protected void defend()
@@ -102,8 +104,15 @@ public class Aggressive extends Entity
 	}
 
 	@Override
-	public GameObject createNew(int x, int y)
+	public GameObject createNew(int x, int y, boolean virgin)
 	{
-		return new Aggressive(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
+		if(virgin)
+		{
+			return new Aggressive(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setPriority(priority);
+		}
+		else
+		{
+			return new Aggressive(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid).setBounds(bounds).setPriority(priority);
+		}
 	}
 }

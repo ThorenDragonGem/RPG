@@ -8,13 +8,15 @@ public class Attribute extends BaseAttribute
 	protected List<RawBonus> rawBonuses;
 	protected List<FinalBonus> finalBonuses;
 	protected double finalValue;
+	protected double multiplier;
 
-	public Attribute(double startingValue)
+	public Attribute(double value, double addedMultiplier)
 	{
-		super(startingValue);
+		super(value, addedMultiplier);
 		rawBonuses = new CopyOnWriteArrayList<>();
 		finalBonuses = new CopyOnWriteArrayList<>();
-		finalValue = getBaseValue();
+		multiplier = addedMultiplier;
+		finalValue = getBaseValue() * (1 + multiplier);
 	}
 
 	public void addRawBonus(RawBonus bonus)
@@ -74,20 +76,22 @@ public class Attribute extends BaseAttribute
 
 	public double calculateValue()
 	{
-		// TODO: add getBaseMultiplier()
+		// added base multiplier
+		// add bonuses and multiply the sum by multiplier (>/=/< 1)
 		finalValue = getBaseValue();
 		applyRawBonuses();
 		applyFinalBonuses();
+		finalValue *= (1 + multiplier);
 		return finalValue;
 	}
 
 	public void updateFinalBonus()
 	{
-		for(FinalBonus bonus : finalBonuses)
+		for(FinalBonus b : finalBonuses)
 		{
-			if(bonus.getTimer() != null)
+			if(b.getTimer() != null)
 			{
-				bonus.update();
+				b.update();
 			}
 		}
 	}
@@ -105,5 +109,25 @@ public class Attribute extends BaseAttribute
 	public double getFinalValue()
 	{
 		return calculateValue();
+	}
+
+	@Override
+	public String toString()
+	{
+		String s = "{A:";
+		for(RawBonus r : rawBonuses)
+		{
+			s += r + " ; ";
+		}
+		for(FinalBonus f : finalBonuses)
+		{
+			s += f + " ; ";
+		}
+		if(s.endsWith(" ; "))
+		{
+			s = s.substring(0, s.length() - 3);
+		}
+		s += "}";
+		return s;
 	}
 }

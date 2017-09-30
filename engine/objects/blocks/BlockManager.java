@@ -54,6 +54,7 @@ public class BlockManager
 			if(!block.isActive())
 			{
 				it.remove();
+				block.undoWorldSolidity(block.getX(), block.getY());
 			}
 		}
 		blocks.sort(renderSorter);
@@ -76,6 +77,20 @@ public class BlockManager
 				if(((block.getY() + (block.getHeight() * Tile.TILEHEIGHT)) > Handler.getCamera().getOffset().y) && ((block.getY() - (block.getHeight() * Tile.TILEHEIGHT)) <= (Engine.getHeight() + Handler.getCamera().getOffset().y)))
 				{
 					block.render(graphics);
+				}
+			}
+		}
+	}
+
+	public void renderOver(Graphics graphics)
+	{
+		for(Block block : blocks)
+		{
+			if(((block.getX() + (block.getWidth() * Tile.TILEWIDTH)) > Handler.getCamera().getOffset().x) && ((block.getX() - (block.getWidth() * Tile.TILEWIDTH)) <= (Engine.getWidth() + Handler.getCamera().getOffset().x)))
+			{
+				if(((block.getY() + (block.getHeight() * Tile.TILEHEIGHT)) > Handler.getCamera().getOffset().y) && ((block.getY() - (block.getHeight() * Tile.TILEHEIGHT)) <= (Engine.getHeight() + Handler.getCamera().getOffset().y)))
+				{
+					block.renderOver(graphics);
 				}
 			}
 		}

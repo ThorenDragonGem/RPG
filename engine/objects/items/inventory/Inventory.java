@@ -108,6 +108,15 @@ public class Inventory
 		return slots;
 	}
 
+	public Entity modify(Item... itemsToAdd)
+	{
+		for(Item item : itemsToAdd)
+		{
+			addItem(item);
+		}
+		return holder;
+	}
+
 	@Override
 	public String toString()
 	{

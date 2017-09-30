@@ -6,7 +6,7 @@ public class CoolDown
 	private boolean started = false;
 
 	/**
-	 * @param length the attack delay in ms
+	 * @param length the attack delay in ups
 	 */
 	public CoolDown(long length)
 	{

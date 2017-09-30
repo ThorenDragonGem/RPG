@@ -54,6 +54,7 @@ public class ItemManager
 			if(!item.isActive())
 			{
 				it.remove();
+				item.undoWorldSolidity(item.getX(), item.getY());
 			}
 		}
 		items.sort(renderSorter);
@@ -76,6 +77,20 @@ public class ItemManager
 				if(((item.getY() + (item.getHeight() * Tile.TILEHEIGHT)) > Handler.getCamera().getOffset().y) && ((item.getY() - (item.getHeight() * Tile.TILEHEIGHT)) <= (Engine.getHeight() + Handler.getCamera().getOffset().y)))
 				{
 					item.render(graphics);
+				}
+			}
+		}
+	}
+
+	public void renderOver(Graphics graphics)
+	{
+		for(Item item : items)
+		{
+			if(((item.getX() + (item.getWidth() * Tile.TILEWIDTH)) > Handler.getCamera().getOffset().x) && ((item.getX() - (item.getWidth() * Tile.TILEWIDTH)) <= (Engine.getWidth() + Handler.getCamera().getOffset().x)))
+			{
+				if(((item.getY() + (item.getHeight() * Tile.TILEHEIGHT)) > Handler.getCamera().getOffset().y) && ((item.getY() - (item.getHeight() * Tile.TILEHEIGHT)) <= (Engine.getHeight() + Handler.getCamera().getOffset().y)))
+				{
+					item.renderOver(graphics);
 				}
 			}
 		}

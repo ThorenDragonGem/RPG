@@ -1,13 +1,9 @@
-/uis/
-/utils/
-/fonts/
 /objects/
 /core/
-/textures/
-/attributes/
+/uis/
+/worlds/
 /physics/
+/launcher/
 /pathfinding/
 /registry/
-/tiles/
-/times/
-/worlds/
+/attributes/

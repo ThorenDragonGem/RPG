@@ -1,4 +1,4 @@
-package objects.entities.containers;
+package objects.entities.statics.containers;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,14 +7,14 @@ import assets.Assets;
 import gfx.Colors;
 import gfx.Skin2D;
 import objects.GameObject;
-import objects.entities.Entity;
+import objects.entities.statics.StaticEntity;
 import objects.items.Item;
 import objects.items.inventory.Inventory;
 import physics.Handler;
 import tiles.Tile;
 import uis.ItemContainerRenderer;
 
-public class ItemContainer extends Entity
+public class ItemContainer extends StaticEntity
 {
 	protected Inventory inventory;
 	protected ItemContainerRenderer renderer;
@@ -70,6 +70,12 @@ public class ItemContainer extends Entity
 		graphics.fillRect((int)(x - Handler.getCamera().getOffset().x), (int)((y + ((height * Tile.TILEHEIGHT) - 3)) - Handler.getCamera().getOffset().y), (int)(((double)time / (double)maxTime) * width * Tile.TILEWIDTH), 3);
 	}
 
+	public ItemContainer setInventory(Inventory inventory)
+	{
+		this.inventory = inventory;
+		return this;
+	}
+
 	public Inventory getInventory()
 	{
 		return inventory;
@@ -86,7 +92,7 @@ public class ItemContainer extends Entity
 	}
 
 	@Override
-	public GameObject createNew(int x, int y)
+	public GameObject createNew(int x, int y, boolean virgin)
 	{
 		if(Handler.getUis().contains(renderer))
 		{
@@ -96,6 +102,13 @@ public class ItemContainer extends Entity
 			}
 			Handler.getUis().remove(renderer);
 		}
-		return new ItemContainer(name, skin, width, height, inventory.getSlots()).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid);
+		if(virgin)
+		{
+			return new ItemContainer(name, skin, width, height, inventory.getSlots()).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid).setPriority(priority);
+		}
+		else
+		{
+			return ((ItemContainer)new ItemContainer(name, skin, width, height, inventory.getSlots()).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT)).setInventory(inventory).setSolid(solid).setPriority(priority);
+		}
 	}
 }

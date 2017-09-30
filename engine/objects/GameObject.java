@@ -58,6 +58,15 @@ public class GameObject
 		graphics.drawImage(skin.getCurrentSkin(), (int)(x - Handler.getCamera().getOffset().x), (int)(y - Handler.getCamera().getOffset().y), width * Tile.TILEWIDTH, height * Tile.TILEHEIGHT, null);
 	}
 
+	/**
+	 * Use to draw something over objects bodies such as attack animations...
+	 * @param graphics
+	 */
+	public void renderOver(Graphics graphics)
+	{
+
+	}
+
 	public GameObject setPosition(int x, int y)
 	{
 		this.x = x;
@@ -113,7 +122,7 @@ public class GameObject
 
 	public GameObject setBounds(Rectangle bounds)
 	{
-		this.bounds = bounds;
+		setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 		return this;
 	}
 
@@ -175,7 +184,7 @@ public class GameObject
 		return this;
 	}
 
-	protected GameObject undoWorldSolidity(int lastX, int lastY)
+	public GameObject undoWorldSolidity(int lastX, int lastY)
 	{
 		for(int i = (lastX / Tile.TILEWIDTH) + bounds.x; i < ((lastX / Tile.TILEWIDTH) + bounds.x + bounds.width); i++)
 		{
@@ -187,8 +196,15 @@ public class GameObject
 		return this;
 	}
 
-	public GameObject createNew(int x, int y)
+	public GameObject createNew(int x, int y, boolean virgin)
 	{
-		return new GameObject(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid);
+		if(virgin)
+		{
+			return new GameObject(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid).setPriority(priority);
+		}
+		else
+		{
+			return new GameObject(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid).setBounds(bounds).setPriority(priority);
+		}
 	}
 }

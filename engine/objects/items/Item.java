@@ -28,14 +28,29 @@ public class Item extends GameObject
 		super.render(graphics);
 	}
 
+	public Item setStackSize(int stackSize)
+	{
+		this.stackSize = stackSize;
+		return this;
+	}
+
 	public int getStackSize()
 	{
 		return stackSize;
 	}
 
 	@Override
-	public GameObject createNew(int x, int y)
+	public GameObject createNew(int x, int y, boolean virgin)
 	{
-		return new Item(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setSolid(solid);
+		if(virgin)
+		{
+			return new Item(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT).setPriority(priority);
+		}
+		else
+		{
+			// TODO rework Item => if not droppable => delete bounds and
+			// solidity else create drop mechanics
+			return ((Item)new Item(name, skin, width, height).setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT)).setStackSize(stackSize).setSolid(solid).setBounds(bounds).setPriority(priority);
+		}
 	}
 }

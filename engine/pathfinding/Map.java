@@ -251,7 +251,7 @@ public class Map<T extends AbstractNode>
 			// variable to handle to far path searching
 			l++;
 			// if algorithm take too long to find path, return no paths
-			if(((System.currentTimeMillis() - start) > 100) || (l > 200))
+			if(((System.currentTimeMillis() - start) > 500) || (l > 300))
 			{
 				return new LinkedList<>();
 			}

@@ -128,6 +128,13 @@ public class Physics
 		return (int)Math.sqrt((x * x) + (y * y));
 	}
 
+	public static double length(double x1, double y1, double x2, double y2)
+	{
+		double x = x2 - x1;
+		double y = y2 - y1;
+		return Math.sqrt((x * x) + (y * y));
+	}
+
 	public static boolean collides(Vector2i pos, GameObject o)
 	{
 		return new Rectangle(o.getX(), o.getY(), o.getWidth() * Tile.TILEWIDTH, o.getHeight() * Tile.TILEHEIGHT).intersects(new Rectangle(pos.x, pos.y, 1, 1));

@@ -8,7 +8,7 @@ import engine.Engine;
 import gfx.Colors;
 import inputs.Keyboard;
 import inputs.Mouse;
-import objects.entities.containers.ItemContainer;
+import objects.entities.statics.containers.ItemContainer;
 import objects.items.Item;
 import objects.items.equipments.Equipment;
 import physics.Handler;

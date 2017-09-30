@@ -1,6 +1,9 @@
-package objects.entities;
+package objects.entities.creatures;
 
 import java.awt.Graphics;
+
+import org.imgscalr.Scalr.Rotation;
+import org.joml.Vector2i;
 
 import assets.Assets;
 import engine.Engine;
@@ -8,26 +11,35 @@ import gfx.Animation;
 import inputs.Keyboard;
 import inputs.Mouse;
 import objects.GameObject;
+import objects.entities.Entity;
 import objects.items.Item;
 import objects.items.equipments.*;
 import objects.items.inventory.EquipmentInventory;
 import objects.items.inventory.Inventory;
 import physics.Handler;
+import physics.Physics;
 import tiles.Tile;
+import times.CoolDown;
 import uis.EquipmentInventoryRenderer;
 import uis.InventoryRenderer;
 
-public class Player extends Entity
+public class Player extends Creature
 {
 	private Inventory inventory;
 	private Inventory renderingInventory;
 	private InventoryRenderer renderer;
 	private EquipmentInventory equipmentInv;
 	private EquipmentInventoryRenderer equipmentInventoryRenderer;
+	private CoolDown attackCD;
+	private Animation currentAttackAnim, attackAnimLeft, attackAnimRight, attackAnimUp, attackAnimDown;
+	private boolean attacking;
+	private Vector2i attackTile;
 
 	public Player()
 	{
-		super("player", new Animation(150, Assets.getArray("idle", 0, 2)), 1, 1);
+		super("player", new Animation(150, Assets.getArray("idle", 0, 2), true), 1, 1);
+		maxHealth = 10000;
+		health = maxHealth;
 		priority = 10;
 
 		inventory = new Inventory(this, 10);
@@ -69,7 +81,17 @@ public class Player extends Entity
 		Handler.getUis().add(renderer);
 		Handler.getUis().add(equipmentInventoryRenderer);
 		renderingInventory = null;
+
+		attackCD = new CoolDown(60);
+		attackCD.go();
+		currentAttackAnim = null;
+		attackAnimLeft = new Animation(250, Assets.getArrayRotated("slash", 0, 3, Rotation.CW_90), false);
+		attackAnimRight = new Animation(250, Assets.getArrayRotated("slash", 0, 3, Rotation.CW_270), false);
+		attackAnimUp = new Animation(250, Assets.getArray("slash", 0, 3), false);
+		attackAnimDown = new Animation(250, Assets.getArrayRotated("slash", 0, 3, Rotation.CW_180), false);
 	}
+
+	int mouseTileX = 0, mouseTileY = 0;
 
 	@Override
 	public void update(double delta)
@@ -78,7 +100,6 @@ public class Player extends Entity
 		boolean mouseMove = false;
 		renderingInventory = null;
 		inventory.update(delta);
-		int mouseTileX = 0, mouseTileY = 0;
 
 		if(Engine.inputs.isButtonDown(Mouse.RIGHT))
 		{
@@ -133,6 +154,7 @@ public class Player extends Entity
 			move(dx, dy);
 		}
 
+		checkAttack(delta);
 	}
 
 	@Override
@@ -142,21 +164,125 @@ public class Player extends Entity
 	}
 
 	@Override
-	public GameObject createNew(int x, int y)
+	public void renderOver(Graphics graphics)
 	{
-		if(Handler.getUis().contains(renderer))
+		super.renderOver(graphics);
+		if(attacking)
 		{
-			if(Handler.getUis().contains(renderer.getItemUI()))
+			if(currentAttackAnim != null)
 			{
-				Handler.getUis().remove(renderer.getItemUI());
+				graphics.drawImage(currentAttackAnim.getCurrentSkin(), (int)(target.getX() - Handler.getCamera().getOffset().x), (int)(target.getY() - Handler.getCamera().getOffset().y), null);
 			}
-			Handler.getUis().remove(renderer);
 		}
-		if(Handler.getUis().contains(equipmentInventoryRenderer))
+	}
+
+	private void checkAttack(double delta)
+	{
+		attackCD.update();
+		if(Engine.inputs.isButtonDown(Mouse.LEFT))
 		{
-			Handler.getUis().remove(equipmentInventoryRenderer);
+			if(attackCD.isOver())
+			{
+				attacking = true;
+				attackNear();
+			}
 		}
-		return new Player().setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
+		if(currentAttackAnim != null)
+		{
+			if(attacking)
+			{
+				currentAttackAnim.update(delta);
+			}
+			if(currentAttackAnim.isFinished())
+			{
+				attacking = false;
+				currentAttackAnim.restart();
+				currentAttackAnim = null;
+			}
+		}
+	}
+
+	private void attackNear()
+	{
+		// attack the next tiles: -1,-1 => 1,1 (but not 0,0)
+		attackTile = Handler.getCamera().getPickRay();
+		if((attackTile.x == (x / Tile.TILEWIDTH)) && (attackTile.y == (y / Tile.TILEHEIGHT)))
+		{
+			return;
+		}
+		for(Entity e : Handler.getObjectManager().getEntityManager().getEntities())
+		{
+			if(!(e instanceof Creature) || (e == this) || ((e.getX() / Tile.TILEWIDTH) < ((x / Tile.TILEWIDTH) - 1)) || ((e.getX() / Tile.TILEWIDTH) > ((x / Tile.TILEWIDTH) + 1)) || ((e.getY() / Tile.TILEHEIGHT) < ((y / Tile.TILEHEIGHT) - 1)) || ((e.getY() / Tile.TILEWIDTH) > ((y / Tile.TILEHEIGHT) + 1)))
+			{
+				continue;
+			}
+			if(((e.getX() / Tile.TILEWIDTH) == (attackTile.x / Tile.TILEWIDTH)) && ((e.getY() / Tile.TILEHEIGHT) == (attackTile.y / Tile.TILEHEIGHT)))
+			{
+				// TODO target's UI
+				target = e;
+				// animation switch
+				if((target.getX() / Tile.TILEWIDTH) == ((x / Tile.TILEWIDTH) + 1))
+				{
+					currentAttackAnim = attackAnimLeft;
+				}
+				else if((target.getX() / Tile.TILEWIDTH) == ((x / Tile.TILEWIDTH) - 1))
+				{
+					currentAttackAnim = attackAnimRight;
+				}
+				else
+				{
+					if((target.getY() / Tile.TILEHEIGHT) == ((y / Tile.TILEHEIGHT) + 1))
+					{
+						currentAttackAnim = attackAnimDown;
+					}
+					else
+					{
+						currentAttackAnim = attackAnimUp;
+					}
+				}
+				attack((Entity)target);
+			}
+		}
+	}
+
+	private void attackFar()
+	{
+		// attack method for spells and shot: no distance checks!!!
+		// TODO improve: currently attacking any Creature even if the distance
+		// is high
+		Vector2i attackTile = Handler.getCamera().getPickRay();
+		for(Entity e : Handler.getObjectManager().getEntityManager().getEntities())
+		{
+			if(!(e instanceof Creature) || (e == this))
+			{
+				continue;
+			}
+			if(((e.getX() / Tile.TILEWIDTH) == (attackTile.x / Tile.TILEWIDTH)) && ((e.getY() / Tile.TILEHEIGHT) == (attackTile.y / Tile.TILEHEIGHT)))
+			{
+				target = e;
+				attack(e);
+			}
+		}
+	}
+
+	private void attack(Entity e)
+	{
+		((Creature)e).health -= 10;
+		attackCD.restart();
+	}
+
+	@Deprecated
+	private boolean mouseAroundPlayer()
+	{
+		// TODO
+		double maxRadius = 5.5 * Tile.TILEWIDTH;
+		// get tile pos
+		// if <= dist
+		if(Physics.length(x - Handler.getCamera().getOffset().x, y - Handler.getCamera().getOffset().y, Engine.inputs.getX() + Handler.getCamera().getOffset().x, Engine.inputs.getY() + Handler.getCamera().getOffset().y) <= maxRadius)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	public InventoryRenderer getInventoryRenderer()
@@ -194,5 +320,23 @@ public class Player extends Entity
 	public EquipmentInventoryRenderer getEquipmentInventoryRenderer()
 	{
 		return equipmentInventoryRenderer;
+	}
+
+	@Override
+	public GameObject createNew(int x, int y, boolean virgin)
+	{
+		if(Handler.getUis().contains(renderer))
+		{
+			if(Handler.getUis().contains(renderer.getItemUI()))
+			{
+				Handler.getUis().remove(renderer.getItemUI());
+			}
+			Handler.getUis().remove(renderer);
+		}
+		if(Handler.getUis().contains(equipmentInventoryRenderer))
+		{
+			Handler.getUis().remove(equipmentInventoryRenderer);
+		}
+		return new Player().setPosition(x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
 	}
 }

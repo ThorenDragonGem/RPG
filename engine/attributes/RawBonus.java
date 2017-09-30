@@ -6,4 +6,10 @@ public class RawBonus extends BaseAttribute
 	{
 		super(value, multiplier);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "[b:" + getBaseValue() + "x" + getBaseMultiplier() + "]";
+	}
 }

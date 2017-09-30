@@ -31,8 +31,8 @@ public class Camera
 
 	public void centerOnPosition(float x, float y)
 	{
-		// this.offset.set(x - Engine.getWidth() / 2 - Tile.TILEWIDTH / 2, y -
-		// Engine.getHeight() / 2 - Tile.TILEHEIGHT / 2);
+		// offset.set(x - (Engine.getWidth() / 2) - (Tile.TILEWIDTH / 2), y -
+		// (Engine.getHeight() / 2) - (Tile.TILEHEIGHT / 2));
 		offset.lerp(new Vector2f((x - (Engine.getWidth() / 2)) + (Tile.TILEWIDTH / 2), (y - (Engine.getHeight() / 2)) + (Tile.TILEHEIGHT / 2)), 0.07f);
 		checkBlankSpace();
 	}
@@ -51,9 +51,11 @@ public class Camera
 		{
 			offset.y = 0;
 		}
-		else if(offset.y > ((Handler.getWorld().getHeight() * Tile.TILEHEIGHT) - Engine.getHeight()))
+		// TODO BUG displacement of Tile.TILE_HEIGHT + 3 (67) pixels along the y
+		// axis at the extreme border of the world
+		else if(offset.y > (((Handler.getWorld().getHeight() * Tile.TILEHEIGHT) + ((Tile.TILEHEIGHT / 2) - 3)) - Engine.getHeight()))
 		{
-			offset.y = (Handler.getWorld().getHeight() * Tile.TILEHEIGHT) - Engine.getHeight();
+			offset.y = ((Handler.getWorld().getHeight() * Tile.TILEHEIGHT) + ((Tile.TILEHEIGHT / 2) - 3)) - Engine.getHeight();
 		}
 	}
 
